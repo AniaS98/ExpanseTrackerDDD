@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpanseTrackerDDD", "ExpanseTrackerDDD\ExpanseTrackerDDD.csproj", "{BC62AB0B-3075-4CCF-936F-9A0C7DAAA30A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC62AB0B-3075-4CCF-936F-9A0C7DAAA30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC62AB0B-3075-4CCF-936F-9A0C7DAAA30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC62AB0B-3075-4CCF-936F-9A0C7DAAA30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC62AB0B-3075-4CCF-936F-9A0C7DAAA30A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1FFC85A-24AD-4362-8B0B-1BAB2F002CA5}
+	EndGlobalSection
+EndGlobal
