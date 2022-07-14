@@ -19,7 +19,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public int DayOfTheMonth { get; protected set; }
         public int NumberOfRecurrencies { get; protected set; }
         public DateTime EndDate { get; protected set; }
-        public RecurrencyType Type { get; protected set; } // nie ma jeszcze tego w konstruktorze
+        public RecurrencyType Type { get; protected set; }
 
         public Recurrency(RecurrencyType type, int numberOfRecurrencies)
         {

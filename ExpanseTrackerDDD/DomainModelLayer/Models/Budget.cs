@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +12,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         OneTime
     }
 
-    public class Budget //agregat?
+    public class Budget : IAggregateRoot
     {
         public string Name { get; protected set; }
         public Guid Id { get; protected set; }
