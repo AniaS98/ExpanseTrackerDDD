@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Base.DomainModelLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace ExpanseTrackerDDD.DomainModelLayer.Interfaces
+namespace Base.DomainModelLayer.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity: IAggregateRoot
+    public interface IRepository<TEntity> where TEntity: AggregateRoot
     {
         TEntity Get(Guid id);
         IList<TEntity> GetAll();

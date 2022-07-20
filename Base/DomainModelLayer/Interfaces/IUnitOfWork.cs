@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExpanseTrackerDDD.DomainModelLayer.Interfaces
+namespace Base.DomainModelLayer.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        //IRepository<> - wszystkei repozytoria, poczytać
-
         void Commit();
         void RejectChanges();
 

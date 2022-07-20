@@ -6,15 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationLayer\DTOs\" />
-    <Folder Include="ApplicationLayer\Mappers\" />
-    <Folder Include="ApplicationLayer\Services\" />
-    <Folder Include="DomainModelLayer\Events\" />
-    <Folder Include="DomainModelLayer\Factories\" />
     <Folder Include="DomainModelLayer\Helpers\" />
     <Folder Include="DomainModelLayer\Services\" />
     <Folder Include="DomainModelLayer\Policies\" />
-    <Folder Include="InfrastructureLayer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Base.csproj" />
   </ItemGroup>
 
 </Project>

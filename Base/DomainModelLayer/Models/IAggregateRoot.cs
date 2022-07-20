@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace ExpanseTrackerDDD.DomainModelLayer.Interfaces
+namespace Base.DomainModelLayer.Models
 {
     public interface IAggregateRoot
     {

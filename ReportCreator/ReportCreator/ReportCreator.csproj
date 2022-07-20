@@ -2,18 +2,21 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="ApplicationLayer\" />
-    <Folder Include="DomainModelLayer\Events\" />
     <Folder Include="DomainModelLayer\Factories\" />
     <Folder Include="DomainModelLayer\Helpers\" />
     <Folder Include="DomainModelLayer\Interfaces\" />
     <Folder Include="DomainModelLayer\Services\" />
     <Folder Include="DomainModelLayer\Policies\" />
     <Folder Include="InfrastructureLayer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Base\Base.csproj" />
   </ItemGroup>
 
 </Project>
