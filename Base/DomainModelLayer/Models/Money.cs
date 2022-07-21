@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Base.DomainModelLayer.Models
 {
-    public class Money
+    public class Money : ValueObject
     {
         public decimal Amount { get; protected set; }
         public Currency _Currency { get; protected set; }
@@ -19,7 +19,10 @@ namespace Base.DomainModelLayer.Models
         {
             this.Amount = amount;
         }
-
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            throw new NotImplementedException();
+        }
         public static Money operator +(Money a, Money b)
         {
             if (a._Currency == b._Currency)
@@ -52,7 +55,6 @@ namespace Base.DomainModelLayer.Models
         {
             return string.Format("{0}.2f {1}", Amount, _Currency);
         }
-
 
     }
 }

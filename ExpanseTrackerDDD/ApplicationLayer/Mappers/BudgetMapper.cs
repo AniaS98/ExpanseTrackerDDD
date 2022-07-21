@@ -34,7 +34,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
                 StartTime = budget.StartTime,
                 Type = (BudgetTypeDto)budget.Type,
                 UserId = budget.UserId
-                
             };
         }
 

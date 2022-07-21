@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Folder Include="ApplicationLayer\" />
-    <Folder Include="DomainModelLayer\Factories\" />
     <Folder Include="DomainModelLayer\Helpers\" />
     <Folder Include="DomainModelLayer\Interfaces\" />
     <Folder Include="DomainModelLayer\Services\" />

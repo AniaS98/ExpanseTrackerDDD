@@ -5,32 +5,35 @@ using System.Text;
 
 namespace Base.DomainModelLayer.Models
 {
-    public abstract class ValueObject<T> where T:ValueObject<T>
+    public abstract class ValueObject
     {
         protected abstract IEnumerable<object> GetEqualityComponents();
 
         public override bool Equals(object obj)
         {
-            var valueObject = obj as T;
-
-            if (valueObject == null)
+            if (obj == null)
                 return false;
 
-            if (GetType() != valueObject.GetType())
+            if (GetType() != obj.GetType())
                 return false;
+
+            var valueObject = (ValueObject)obj;
 
             return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
         }
-        protected abstract bool EqualsCore(T other);
 
         public override int GetHashCode()
         {
-            return GetHashCodeCore();
+            return GetEqualityComponents().Aggregate(1, (current, obj) =>
+            {
+                unchecked
+                {
+                    return current * 23 + (obj?.GetHashCode() ?? 0);
+                }
+            });
         }
 
-        protected abstract int GetHashCodeCore();
-
-        public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
+        public static bool operator ==(ValueObject a, ValueObject b)
         {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
                 return true;
@@ -41,7 +44,7 @@ namespace Base.DomainModelLayer.Models
             return a.Equals(b);
         }
 
-        public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
+        public static bool operator !=(ValueObject a, ValueObject b)
         {
             return !(a == b);
         }
