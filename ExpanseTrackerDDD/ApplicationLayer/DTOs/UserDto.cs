@@ -9,9 +9,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
     {
         public Guid Id { get; set; }
         public string Login { get; set; }
-        public SecureString Password { get; set; }
-        public string Firstname { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
+        public List<AccountDto> AccountDtos { get; set; }
+        public List<BudgetDto> BudgetDtos { get; set; }
 
     }
 }

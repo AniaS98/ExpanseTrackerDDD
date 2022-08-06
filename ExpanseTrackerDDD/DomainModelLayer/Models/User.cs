@@ -4,8 +4,8 @@ using System.Text;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using System.Security;
 using System.Collections.ObjectModel;
-using Base.DomainModelLayer.Models;
-using Base.DomainModelLayer.Events;
+using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+using ExpanseTrackerDDD.DomainModelLayer.Events;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {
@@ -13,25 +13,33 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
     {
         public Guid Id { get; protected set; }
         public string Login { get; protected set; }
-        public SecureString Password { get; protected set; }
-        public string Firstname { get; protected set; }
+        public string Password { get; protected set; } //tymczasowe rozwiązanie
+        public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
-        /*
-        private List<Account> accounts = new List<Account>();
-        public ReadOnlyCollection<Account> Accounts { get { return this.accounts.AsReadOnly(); } }
+        public ICollection<Account> Accounts { get; protected set; }
+        public ICollection<Budget> Budgets { get; protected set; }
 
-        private List<Budget> budgets = new List<Budget>();
-        public ReadOnlyCollection<Budget> Budgets { get { return this.budgets.AsReadOnly(); } }
-        */
-        public User(Guid id, IDomainEventPublisher domainEventPublisher, string login, SecureString password, string firstName, string lastName) : base(id, domainEventPublisher)
+        /// <summary>
+        /// TYMCZASOWE TYMCZASOWE TYMCZASOWE - DO MARKOWANIA W LOGOWANIU W GUI
+        /// </summary>
+        public User(Guid id, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
         {
-            this.Id = new Guid();
+            this.Id = id;
+        }
+        public User(Guid id, IDomainEventPublisher domainEventPublisher, string login, string password, string firstName, string lastName) : base(id, domainEventPublisher)
+        {
+            this.Id = id;
             this.Login = login;
             this.Password = password;
-            this.Firstname = firstName;
+            this.FirstName = firstName;
             this.LastName = lastName;
-            //this.accounts = new List<Account>();
-            //this.budgets = new List<Budget>();
+            this.Accounts = new List<Account>();
+            this.Budgets = new List<Budget>();
+        }
+
+        public void UpdatePassword(string newPassword)
+        {
+            this.Password = newPassword;
         }
 
 

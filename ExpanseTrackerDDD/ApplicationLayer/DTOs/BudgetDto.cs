@@ -17,7 +17,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public MoneyDto Limit { get; set; }
         public MoneyDto CurrentValue { get; set; }
         public MoneyDto LimitUtilization { get; set; }
-        public CurrencyDto Currency { get; set; }
         public BudgetTypeDto Type { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

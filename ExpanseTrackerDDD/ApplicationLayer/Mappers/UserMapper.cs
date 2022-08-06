@@ -22,14 +22,25 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
 
         public UserDto Map(User user)
         {
-            return new UserDto()
+            UserDto userDto = new UserDto()
             {
-                Firstname = user.Firstname,
+                FirstName = user.FirstName,
                 Id = user.Id,
                 LastName = user.LastName,
                 Login = user.Login,
-                Password = user.Password
+                Password = user.Password,
+                AccountDtos = new List<AccountDto>(),
+                BudgetDtos = new List<BudgetDto>()
             };
+            foreach (Account a in user.Accounts)
+            {
+                userDto.AccountDtos.Add( AccountMapper.Map(a));
+            }
+            foreach (Budget b in user.Budgets)
+            {
+                userDto.BudgetDtos.Add(BudgetMapper.Map(b));
+            }
+            return userDto;
         }
 
 

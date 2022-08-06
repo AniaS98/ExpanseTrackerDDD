@@ -14,13 +14,14 @@ namespace ReportCreator.DomainModelLayer.Models.Reports
             this.Debt = new Money(0, "PLN");//zmienić logikę na pokazanie tego raportu w walucie domyślnej
             foreach(var account in Accounts)
             {
+                /*
                 foreach(var transaction in account.Transactions)
                 {
                     if (transaction.Type == "Income")
                         Income += transaction.Value;
                     else if(transaction.Type == "Expanse")
                         Debt += transaction.Value;
-                }
+                }*/
             }
         
         }

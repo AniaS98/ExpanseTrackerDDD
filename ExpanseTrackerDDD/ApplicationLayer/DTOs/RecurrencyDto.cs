@@ -20,5 +20,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public int NumberOfRecurrencies { get; set; }
         public DateTime EndDate { get; set; }
         public RecurrencyTypeDto Type { get; set; }
+        public Guid TransactionId { get; set; }
     }
 }

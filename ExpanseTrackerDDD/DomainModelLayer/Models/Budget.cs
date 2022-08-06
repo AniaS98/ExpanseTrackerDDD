@@ -1,5 +1,5 @@
-﻿using Base.DomainModelLayer.Events;
-using Base.DomainModelLayer.Models;
+﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
+using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,48 +21,54 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public Money Limit { get; protected set; }
         public Money CurrentValue { get; protected set; }
         public Money LimitUtilization { get; protected set; }
-        public Currency Currency { get; protected set; }
         public BudgetType Type { get; protected set; }
         public DateTime StartTime { get; protected set; }
         public DateTime EndTime { get; protected set; }
         public Guid UserId { get; protected set; }
+        //public User User { get; protected set; }
 
-        public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, Currency currency, Guid userId) : base(id, domainEventPublisher)
+        public Budget(Guid id, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
+        {
+            this.Id = id;
+        }
+
+        public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, Guid userId) : base(id, domainEventPublisher)
         {
             this.Name = name;
-            this.Id = new Guid();
+            this.Id = id;
             this.Limit = limit;
-            this.Currency = currency;
-            this.CurrentValue = new Money(0,currency);
-            this.LimitUtilization = new Money(0,currency);
+            this.CurrentValue = new Money(0, limit._Currency);
+            this.LimitUtilization = new Money(0,limit._Currency);
             this.Type = type;
             this.StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             this.EndTime = this.StartTime.AddMonths(1).AddDays(-1);
             this.UserId = userId;
+            //this.User = user;
         }
 
         public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, DateTime startDate, DateTime endDate, Currency currency, Guid userId) : base(id, domainEventPublisher)
         {
             this.Name = name;
-            this.Id = new Guid();
+            this.Id = id;
             this.Limit = limit;
-            this.Currency = currency;
             this.CurrentValue = new Money(0, currency);
             this.Type = type;
             this.StartTime = startDate;
             this.EndTime = endDate;
             this.UserId = userId;
+            //this.User = user;
         }
 
-        private void RenewBudget(Budget oldBudget)//dopisać żeby raport się restartował dzień po ostatnim dniu budżetu
+        public void RenewBudget(Budget oldBudget)//dopisać żeby raport się restartował dzień po ostatnim dniu budżetu
         {
             this.Name = oldBudget.Name;
-            this.Id = new Guid();
             this.Limit = oldBudget.Limit;
-            this.CurrentValue = new Money(0, this.Currency);
+            this.CurrentValue = new Money(0, oldBudget.CurrentValue._Currency);
             this.Type = oldBudget.Type;
             this.StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             this.EndTime = this.StartTime.AddMonths(1).AddDays(-1);
+            //this.User = oldBudget.User;
+            this.UserId = oldBudget.UserId;
         }
 
         public void UpdateCurrentValue(Money value)

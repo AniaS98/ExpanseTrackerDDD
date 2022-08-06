@@ -20,11 +20,10 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return result;
         }
 
-        public BudgetDto Map(Budget budget)
+        public static BudgetDto Map(Budget budget)
         {
             return new BudgetDto()
             {
-                Currency = Mappers.Map(budget.Currency),
                 CurrentValue = Mappers.Map(budget.CurrentValue),
                 EndTime = budget.EndTime,
                 Id = budget.Id,

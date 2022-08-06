@@ -34,7 +34,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public TransactionTypeDto Type { get; set; }
         public MoneyDto Value { get; set; }
         public CategoryDto TransactionCategory { get; set; }
-        public SubcategoryDto TransactionSubcategory { get; set; }
         public DateTime TransactionDate { get; set; }
         public TransactionStatusDto Status { get; set; }
         public TransactionFrequencyDto Frequency { get; set; }

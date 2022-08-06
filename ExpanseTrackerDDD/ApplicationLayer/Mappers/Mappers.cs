@@ -1,5 +1,4 @@
-﻿using Base.DomainModelLayer.Models;
-using ExpanseTrackerDDD.ApplicationLayer.DTOs;
+﻿using ExpanseTrackerDDD.ApplicationLayer.DTOs;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -11,26 +10,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
     {
         public static CategoryDto Map(Category category)
         {
-            CategoryDto result = new CategoryDto()
+            return new CategoryDto()
             {
                 IconPath = category.IconPath,
                 Name = category.Name,
-                Subcategories = new List<SubcategoryDto>()
-            };
-            foreach (Subcategory subcategory in category.Subcategories)
-            {
-                SubcategoryDto subcategoryDto = Map(subcategory);
-                result.Subcategories.Add(subcategoryDto);
-            }
-            return result;
-        }
-
-        public static SubcategoryDto Map(Subcategory subcategory)
-        {
-            return new SubcategoryDto()
-            {
-                IconPath = subcategory.IconPath,
-                Name = subcategory.Name,
+                TransactionDtoId = category.TransactionId
             };
         }
 
@@ -42,7 +26,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
                 DaysApart = recurrency.DaysApart,
                 EndDate = recurrency.EndDate,
                 NumberOfRecurrencies = recurrency.NumberOfRecurrencies,
-                Type = (RecurrencyTypeDto)recurrency.Type
+                Type = (RecurrencyTypeDto)recurrency.Type,
+                TransactionId = recurrency.TransactionId
             };
         }
 
@@ -51,7 +36,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return new MoneyDto()
             {
                 Amount = money.Amount,
-                Currency = Map(money._Currency)
+                Currency = Map(money._Currency),
+                ForeignKey = money.ForeignKey
             };
         }
 
@@ -59,12 +45,12 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
         {
             return new CurrencyDto()
             {
-                Base = currency.Base,
-                CurrentValue = currency.CurrentValue,
-                httpClient = currency.httpClient,
+                Base = (CurrencyNameDto)currency.BaseCurrency,
+                CurrentBuyValue = currency.CurrentBuyValue,
+                CurrentSellValue = currency.CurrentSellValue,
                 Name = (CurrencyNameDto)currency.Name,
                 UpdateDateTime = currency.UpdateDateTime,
-                Url = currency.Url
+                AccountId = currency.AccountId
             };
         }
 

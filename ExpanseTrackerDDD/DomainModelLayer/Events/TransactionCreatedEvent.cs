@@ -1,6 +1,4 @@
-﻿using Base.DomainModelLayer.Events;
-using Base.DomainModelLayer.Models;
-using Base.InfrastructureLayer;
+﻿using ExpanseTrackerDDD.InfrastructureLayer;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;

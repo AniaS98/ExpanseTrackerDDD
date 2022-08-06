@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,24 +14,30 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         Every_x_day 
     }
 
-    public class Recurrency
+    public class Recurrency : ValueObject
     {
         public int DaysApart { get; protected set; }
         public int DayOfTheMonth { get; protected set; }
         public int NumberOfRecurrencies { get; protected set; }
         public DateTime EndDate { get; protected set; }
         public RecurrencyType Type { get; protected set; }
+        public Guid TransactionId { get; protected set; }
+        //public Transaction Transaction { get; protected set; }
 
-        public Recurrency(RecurrencyType type, int numberOfRecurrencies)
+        public Recurrency(RecurrencyType type, int numberOfRecurrencies, Guid transactionId)
         {
             this.NumberOfRecurrencies = numberOfRecurrencies;
             this.Type = type;
+            this.TransactionId = transactionId;
+            //this.Transaction = transaction;
         }
 
-        public Recurrency(RecurrencyType type, int numberOfRecurrencies, int dayOfTheMonth)
+        public Recurrency(RecurrencyType type, int numberOfRecurrencies, Guid transactionId, int dayOfTheMonth)
         {
             this.NumberOfRecurrencies = numberOfRecurrencies;
             this.Type = type;
+            this.TransactionId = transactionId;
+            //this.Transaction = transaction;
         }
 
         public void SetDaysApart_DayOfTheMonth(RecurrencyType type, int dayOfTheMonth = 0)
@@ -66,9 +73,9 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
                     }
             }
         }
-
-
-
-
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

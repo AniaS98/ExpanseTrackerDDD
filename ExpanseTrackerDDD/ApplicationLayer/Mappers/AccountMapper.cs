@@ -20,19 +20,24 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return result;
         }
 
-        public AccountDto Map(Account account)
+        public static AccountDto Map(Account account)
         {
-            return new AccountDto()
+            AccountDto accountDto = new AccountDto()
             {
-                AccountBalance = Mappers.Map(account.AccountBalance),
                 AccountCurrency = Mappers.Map(account.AccountCurrency),
                 AccountNumber = account.AccountNumber,
                 Color = account.Color,
                 Id = account.Id,
                 Name = account.Name,
                 Type = (AccountTypeDto)account.Type,
-                UserId = account.UserId
+                UserId = account.UserId,
+                TransactionDtos = new List<TransactionDto>()
             };
+            foreach(Transaction t in account.Transactions)
+            {
+                accountDto.TransactionDtos.Add(TransactionMapper.Map(t));
+            }
+            return accountDto;
         }
 
 

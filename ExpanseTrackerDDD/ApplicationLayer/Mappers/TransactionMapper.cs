@@ -19,7 +19,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return result;
         }
 
-        public TransactionDto Map(Transaction transaction)
+        public static TransactionDto Map(Transaction transaction)
         {
             return new TransactionDto()
             {
@@ -32,7 +32,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
                 TransactionCategory = Mappers.Map(transaction.TransactionCategory),
                 TransactionDate = transaction.TransactionDate,
                 TransactionRecurrency = Mappers.Map(transaction.TransactionRecurrency),
-                TransactionSubcategory = Mappers.Map(transaction.TransactionSubcategory),
                 Type = (TransactionTypeDto)transaction.Type,
                 Value = Mappers.Map(transaction.Value),
                 AccountId = transaction.AccountId

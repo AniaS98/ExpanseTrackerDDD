@@ -14,12 +14,13 @@ namespace ReportCreator.DomainModelLayer.Models.Reports
             Debts = new Dictionary<string, Money>();
             foreach(var account in Accounts)
             {
+                /*
                 foreach(var transaction in account.Transactions)
                 {
                     if(transaction.Frequency == "Reoccuring" && transaction.Type == "Expanse")
                         Debts.Add(transaction.Name, transaction.Value);
 
-                }
+                }*/
             }
             throw new NotImplementedException();
         }

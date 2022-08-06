@@ -8,5 +8,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
     {
         public decimal Amount { get; set; }
         public CurrencyDto Currency { get; set; }
+        public Guid ForeignKey { get; set; }
     }
 }

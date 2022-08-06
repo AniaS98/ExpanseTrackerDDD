@@ -8,6 +8,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
     {
         public string Name { get; set; }
         public string IconPath { get; set; }
-        public List<SubcategoryDto> Subcategories { get; set; }
+        public Guid TransactionDtoId { get; set; }
     }
 }
