@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {
@@ -18,42 +19,41 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         Loan
     }
 
-
     public class Account : AggregateRoot
     {
+        public Money Balance { get; protected set; }
         public string Name { get; protected set; }
         public string AccountNumber { get; protected set; }
         public AccountType Type { get; protected set; }
-        public Currency AccountCurrency { get; protected set; }
+        public CurrencyName CurrencyName { get; protected set; }
         public string Color { get; protected set; }
-        public Guid UserId { get; protected set; }
-        //public User User { get; protected set; }
-        public ICollection<Transaction> Transactions { get; protected set; }
+        public Guid UserId { get; protected set; } 
 
-        public Account(Guid id, IDomainEventPublisher domainEventPublisher, string name, string accountNumber, AccountType type, Currency accountCurrency, Money accountBalance, Guid userId) : base(id, domainEventPublisher)
+
+        public Account(Guid id, IDomainEventPublisher domainEventPublisher, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m) : base(id, domainEventPublisher)
         {
             this.Id = id;
+            this.Balance = new Money(balance, currencyName);
             this.Name = name;
             this.AccountNumber = accountNumber;
             this.Type = type;
-            this.AccountCurrency = accountCurrency;
+            this.CurrencyName = currencyName;
             this.Color = "";
             //this.User = user;
             this.UserId = userId;
-            this.Transactions = new List<Transaction>();
         }
 
-        public Account(Guid id, IDomainEventPublisher domainEventPublisher, string name, string accountNumber, AccountType type, Currency accountCurrency, Money accountBalance, Guid userId, string color) : base(id, domainEventPublisher)
+        public Account(Guid id, IDomainEventPublisher domainEventPublisher, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, string color, decimal balance = 0.0m) : base(id, domainEventPublisher)
         {
-            this.Id = new Guid();
+            this.Id = id;
+            this.Balance = new Money(balance, currencyName);
             this.Name = name;
             this.AccountNumber = accountNumber;
             this.Type = type;
-            this.AccountCurrency = accountCurrency;
+            this.CurrencyName = currencyName;
             this.Color = color;
             //this.User = user;
             this.UserId = userId;
-            this.Transactions = new List<Transaction>();
         }
 
         public void UpdateName(string name)
@@ -69,6 +69,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public void UpdateColor(string color)
         {
             this.Color = color;
+        }
+        public void UpdateType(AccountType type)
+        {
+            this.Type = type;
         }
 
 

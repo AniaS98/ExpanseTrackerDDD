@@ -1,9 +1,9 @@
 ﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
-using ExpanseTrackerDDD.ApplicationLayer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 {
@@ -15,23 +15,77 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
         {
             this._domainEventPublisher = domainEventPublisher;
         }
-        public Transaction Create(TransactionDto transactionDto)
+        //Muszę jeszcze dodać opcje nasłuchiwania transakcji przez budżet żeby zmieniła się wartość obecnego wykorzystania limitu
+        public Transaction CreateTransaction(Guid id, string description, TransactionType type, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note = "")
         {
-            Currency currency = new Currency((CurrencyName)transactionDto.Value.Currency.Base, (CurrencyName)transactionDto.Value.Currency.Name);
-            Money value = new Money(transactionDto.Value.Amount, currency);
+            Recurrency recurrency = new Recurrency();
+            //int NumberOfRecurrencies
+            //RecurrencyPeriod
+            // EndDate
 
-            return new Transaction(new Guid(), _domainEventPublisher, transactionDto.Description, (TransactionType)transactionDto.Type, value, new Category(), new Subcategory(), transactionDto.TransactionDate, (TransactionStatus)transactionDto.Status, transactionDto.AccountId, transactionDto.Contractor, transactionDto.Note);
+            if (recurrencyType != RecurrencyType.None)
+            {
+                if (period == RecurrencyPeriod.None)
+                    throw new Exception("Please specify until when should the transaction occur");
+                if (period == RecurrencyPeriod.Number && recurrencyType == RecurrencyType.Every_x_day && String.IsNullOrEmpty(daysApart.ToString()))
+                    throw new Exception("Please specify how many times should the transaction occur");
+                if (period == RecurrencyPeriod.Date && String.IsNullOrEmpty(recurrencyEndDate.ToString()))
+                    throw new Exception("Please specify until when should the transaction occur");
+            }
+
+            switch ((int)recurrencyType)
+            {
+                case 0:
+                    {
+                        break;
+                    }
+                case 1:
+                    {
+                        recurrency = new Recurrency(recurrencyType, 1, numberOfRecurrencies, recurrencyEndDate);
+                        break;
+                    }
+                case 2:
+                    {
+                        recurrency = new Recurrency(recurrencyType, 7, numberOfRecurrencies, recurrencyEndDate);
+                        break;
+                    }
+                case 3:
+                    {
+                        recurrency = new Recurrency(recurrencyType, dayOfTheMonth, numberOfRecurrencies, recurrencyEndDate, 0);
+                        break;
+                    }
+                case 4:
+                    {
+                        recurrency = new Recurrency(recurrencyType, dayOfTheMonth, numberOfRecurrencies, recurrencyEndDate, 0);
+
+                        break;
+                    }
+                case 5:
+                    {
+                        recurrency = new Recurrency(recurrencyType, daysApart, numberOfRecurrencies, recurrencyEndDate);
+                        break;
+                    }
+            }
+
+            Category category = new Category(categoryName, categorySubcategoryName);
+
+            return new Transaction(id, _domainEventPublisher, description, type, value, category, recurrency, transactionDate, status, accountId, contractor, note);
         }
 
-        public void CreateTransfer(TransactionDto transactionDto, Guid destinationAccountId)
+        public Transaction CreateTransfer(Transaction from, Guid destinationAccountId)
         {
-            Transaction from = Create(transactionDto);
-            transactionDto.Id = new Guid();
-            transactionDto.Type = TransactionTypeDto.Income;
-            transactionDto.AccountId = destinationAccountId;
-            Transaction to = Create(transactionDto);
+            return new Transaction(new Guid(), _domainEventPublisher, from.Description, from.Type, from.Value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
         }
 
+        public Transaction Exchange(Transaction from, Guid destinationAccountId, CurrencyName newCurrency)
+        {
+            Money value = from.Value;
+
+            var task = Task.Run(async () => await value.UpdateCurrentValue(value.Currency, newCurrency));
+
+            return new Transaction(new Guid(), _domainEventPublisher, from.Description, from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
+
+        }
 
 
 

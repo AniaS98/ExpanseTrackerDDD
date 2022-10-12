@@ -19,7 +19,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return result;
         }
 
-        public static TransactionDto Map(Transaction transaction)
+        public TransactionDto Map(Transaction transaction)
         {
             return new TransactionDto()
             {

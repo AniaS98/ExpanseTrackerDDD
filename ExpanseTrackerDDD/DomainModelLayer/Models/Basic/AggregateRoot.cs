@@ -8,11 +8,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models.Basic
     public abstract class AggregateRoot : Entity, IAggregateRoot
     {
         protected IDomainEventPublisher DomainEventPublisher { get; set; }
-        /// <summary>
-        /// EF Constructor
-        /// </summary>
-        public AggregateRoot(Guid id) : base(id)
-        {}
 
         public AggregateRoot(Guid id, IDomainEventPublisher domainEventPublisher) : base(id)
         {

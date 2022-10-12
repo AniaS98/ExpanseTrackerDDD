@@ -12,9 +12,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
         {
             return new CategoryDto()
             {
-                IconPath = category.IconPath,
-                Name = category.Name,
-                TransactionDtoId = category.TransactionId
+                Name = (CategoryNameDto)category.Name,
+                SubcategoryName = (SubcategoryNameDto)category.SubcategoryName
             };
         }
 
@@ -27,7 +26,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
                 EndDate = recurrency.EndDate,
                 NumberOfRecurrencies = recurrency.NumberOfRecurrencies,
                 Type = (RecurrencyTypeDto)recurrency.Type,
-                TransactionId = recurrency.TransactionId
+                CurrentNumberOfRecurrencies = recurrency.CurrentNumberOfRecurrencies,
+                Period = (RecurrencyPeriodDto)recurrency.Period
             };
         }
 
@@ -36,21 +36,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return new MoneyDto()
             {
                 Amount = money.Amount,
-                Currency = Map(money._Currency),
-                ForeignKey = money.ForeignKey
-            };
-        }
-
-        public static CurrencyDto Map(Currency currency)
-        {
-            return new CurrencyDto()
-            {
-                Base = (CurrencyNameDto)currency.BaseCurrency,
-                CurrentBuyValue = currency.CurrentBuyValue,
-                CurrentSellValue = currency.CurrentSellValue,
-                Name = (CurrencyNameDto)currency.Name,
-                UpdateDateTime = currency.UpdateDateTime,
-                AccountId = currency.AccountId
+                Currency = (CurrencyNameDto)(money.Currency),
             };
         }
 

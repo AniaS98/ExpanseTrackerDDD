@@ -1,3 +1,6 @@
+using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
+using ExpanseTrackerDDD.DomainModelLayer.Repositories;
+using ExpanseTrackerDDD.InfrastructureLayer.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,8 +28,16 @@ namespace ExpanseTrackerGUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<ETContext>();//Configuration["ConnectionStrings:DefaultConnection"]
+            //options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"])
+            //services.AddControllersWithViews();
+
             services.AddControllersWithViews();
-            services.AddDbContext<DbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddDbContext<ETContext>();
+            /*services.AddScoped(typeof(IRepository<>), typeof(AccountRepository));
+            services.AddScoped(typeof(IRepository<>), typeof(BudgetRepository));
+            services.AddScoped(typeof(IRepository<>), typeof(TransactionRepository));
+            services.AddScoped(typeof(IRepository<>), typeof(UserRepository));*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

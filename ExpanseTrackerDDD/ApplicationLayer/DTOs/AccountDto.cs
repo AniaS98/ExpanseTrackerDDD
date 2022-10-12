@@ -18,13 +18,12 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
     public class AccountDto
     {
         public Guid Id { get; set; }
+        public MoneyDto Balance { get; set; }
         public string Name { get; set; }
         public string AccountNumber { get; set; }
         public AccountTypeDto Type { get; set; }
-        public CurrencyDto AccountCurrency { get; set; }
+        public CurrencyNameDto Currency { get; set; }
         public string Color { get; set; }
         public Guid UserId { get; set; }
-        //public UserDto User { get; protected set; }
-        public List<TransactionDto> TransactionDtos { get; set; }
     }
 }

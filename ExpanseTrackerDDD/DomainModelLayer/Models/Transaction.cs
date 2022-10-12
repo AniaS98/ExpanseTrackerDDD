@@ -4,6 +4,7 @@ using System.Text;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {
@@ -33,7 +34,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
 
     public class Transaction : AggregateRoot
     {
-        public Guid Id { get; protected set; }
         public string Description { get; protected set; }
         public TransactionType Type { get; protected set; }
         public Money Value { get; protected set; }
@@ -45,10 +45,8 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public string Note { get; protected set; }
         public string Contractor { get; protected set; }
         public Guid AccountId { get; protected set; }
-        //public Account Account { get; protected set; }
 
-
-        public Transaction(Guid id, IDomainEventPublisher domainEventPublisher, string description, TransactionType type, Money value, Category category, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note="") : base(id, domainEventPublisher)
+        public Transaction(Guid id, IDomainEventPublisher domainEventPublisher, string description, TransactionType type, Money value, Category category, Recurrency recurrency, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note="") : base(id, domainEventPublisher)
         {
             this.Id = id;
             this.Description = description;
@@ -58,9 +56,8 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.TransactionDate = transactionDate;
             this.Status = status;
             this.Frequency = TransactionFrequency.OneTime;
-            this.TransactionRecurrency = TransactionRecurrency;
+            this.TransactionRecurrency = recurrency;
             this.AccountId = accountId;
-            //this.Account = account;
             this.Contractor = contractor;
             this.Note = note;
         }

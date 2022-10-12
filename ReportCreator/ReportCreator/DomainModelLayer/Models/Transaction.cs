@@ -16,7 +16,7 @@ namespace ReportCreator.DomainModelLayer.Models
         public Guid BudgetId { get; protected set; }
         public Guid AccountId { get; protected set; }
 
-        public Transaction(string name, Money value, string type, string frequency, string category, DateTime date, string status, Guid budgetId)
+        public Transaction(string name, Money value, string type, string frequency, string category, DateTime date, string status, Guid budgetId, Guid accountId)
         {
             this.Name = name;
             this.Value = value;
@@ -26,7 +26,15 @@ namespace ReportCreator.DomainModelLayer.Models
             this.Date = date;
             this.Status = status;
             this.BudgetId = budgetId;
-            this.AccountId = AccountId;
+            this.AccountId = accountId;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name + "\tof value: " + Value + "\tDate: " + Date);
+
+            return sb.ToString();
         }
 
 

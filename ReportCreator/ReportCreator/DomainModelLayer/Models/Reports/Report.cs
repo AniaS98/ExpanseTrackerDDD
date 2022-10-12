@@ -5,22 +5,27 @@ using System.Text;
 
 namespace ReportCreator.DomainModelLayer.Models
 {
+    public enum ReportType
+    {
+        Daily,
+        Weekly,
+        Monthly,
+        Annual
+    }
+
     public abstract class Report
     {
         public string Name { get; protected set; }
         public DateTime StartDate { get; protected set; }
         public DateTime EndDate { get; protected set; }
-        //Klasa z drugiego kontekstu
-        private List<Account> accounts = new List<Account>();
-        public ReadOnlyCollection<Account> Accounts { get { return this.accounts.AsReadOnly(); } }
+        public ReportType ReportType { get; protected set; }
+        public Guid OwnerId { get; protected set; }
 
-        public Report(string name, DateTime startDate, DateTime endDate)
+        public Report(DateTime startDate, DateTime endDate, Guid ownerId)
         {
-            this.Name = name;
             this.StartDate = startDate;
             this.EndDate = endDate;
-            this.accounts = new List<Account>();
-            MapAccounts();
+            this.OwnerId = ownerId;
         }
 
         public void SetDates(DateTime startDate, DateTime endDate)
@@ -28,11 +33,10 @@ namespace ReportCreator.DomainModelLayer.Models
             this.StartDate = startDate;
             this.EndDate = endDate;
         }
-
-        public void MapAccounts()
+        //Możliwe, że będzie gdzieś indziej
+        public void Renew()
         {
-            //Zapisywanie kont użytkownika
-            throw new NotImplementedException();
+
         }
 
 

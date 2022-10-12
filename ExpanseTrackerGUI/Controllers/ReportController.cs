@@ -26,9 +26,9 @@ namespace ExpanseTrackerGUI.Controllers
         public ReportController(ILogger<ReportController> logger)
         {
             _logger = logger;
-            UnitOfWork = new ExpanseTrackerUnitOfWork();
+            //UnitOfWork = new ExpanseTrackerUnitOfWork();
             UserMapper = new UserMapper();
-            Service = new UserService(UnitOfWork, UserMapper);
+            //Service = new UserService(UnitOfWork, UserMapper);
             //Context = context;
         }
         #region BalancePerAccount

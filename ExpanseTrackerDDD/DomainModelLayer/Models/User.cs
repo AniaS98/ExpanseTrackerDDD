@@ -9,35 +9,24 @@ using ExpanseTrackerDDD.DomainModelLayer.Events;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {
-    public class User : AggregateRoot
+    public class User : Entity
     {
-        public Guid Id { get; protected set; }
         public string Login { get; protected set; }
-        public string Password { get; protected set; } //tymczasowe rozwiązanie
+        public SecureString Password { get; protected set; } 
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
-        public ICollection<Account> Accounts { get; protected set; }
-        public ICollection<Budget> Budgets { get; protected set; }
 
-        /// <summary>
-        /// TYMCZASOWE TYMCZASOWE TYMCZASOWE - DO MARKOWANIA W LOGOWANIU W GUI
-        /// </summary>
-        public User(Guid id, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
-        {
-            this.Id = id;
-        }
-        public User(Guid id, IDomainEventPublisher domainEventPublisher, string login, string password, string firstName, string lastName) : base(id, domainEventPublisher)
+
+        public User(Guid id, string login, SecureString password, string firstName, string lastName) : base(id)
         {
             this.Id = id;
             this.Login = login;
             this.Password = password;
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.Accounts = new List<Account>();
-            this.Budgets = new List<Budget>();
         }
 
-        public void UpdatePassword(string newPassword)
+        public void UpdatePassword(SecureString newPassword)
         {
             this.Password = newPassword;
         }

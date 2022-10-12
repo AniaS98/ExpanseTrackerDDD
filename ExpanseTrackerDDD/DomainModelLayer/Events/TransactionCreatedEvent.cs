@@ -4,6 +4,7 @@ using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ExpanseTrackerDDD.InfrastructureLayer.EF;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Events
 {
@@ -16,9 +17,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Events
         public DateTime TransactionDate { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public TransactionFrequency Frequency { get; protected set; }
-        public List<IObserver> Observers { get; set; }
+        public Guid AccountId { get; protected set; }
+        //public List<IObserver> Observers { get; set; }
 
-        public TransactionCreatedEvent(string description, TransactionType type, Money value, Category transactionCategory, DateTime transactionDate, TransactionStatus status, TransactionFrequency frequency)
+        public TransactionCreatedEvent(string description, TransactionType type, Money value, Category transactionCategory, DateTime transactionDate, TransactionStatus status, TransactionFrequency frequency, Guid accountId)
         {
             this.Description = description;
             this.Type = type;
@@ -27,6 +29,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Events
             this.TransactionDate = transactionDate;
             this.Status = status;
             this.Frequency = frequency;
+            this.AccountId = accountId;
         }
 
     }

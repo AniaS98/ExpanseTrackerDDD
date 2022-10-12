@@ -7,22 +7,31 @@ namespace ReportCreator.DomainModelLayer.Models.Reports
 {
     public class RecurringDebts : Report
     {
-        public Dictionary<string, Money> Debts { get; protected set; }
+        private List<Transaction> transactions = new List<Transaction>();
+        public ReadOnlyCollection<Transaction> Transactions { get { return this.transactions.AsReadOnly(); } }
 
-        public RecurringDebts(string name, DateTime startDate, DateTime endDate) : base(name, startDate, endDate)
+        //factory
+        public RecurringDebts(string name, DateTime startDate, DateTime endDate, Guid ownerId, List<Transaction> listOfTransactions, ReportType reportType = ReportType.Monthly) : base(startDate, endDate, ownerId)
         {
-            Debts = new Dictionary<string, Money>();
-            foreach(var account in Accounts)
+            foreach (var transaction in listOfTransactions)
             {
-                /*
-                foreach(var transaction in account.Transactions)
-                {
-                    if(transaction.Frequency == "Reoccuring" && transaction.Type == "Expanse")
-                        Debts.Add(transaction.Name, transaction.Value);
-
-                }*/
+                if (transaction.Frequency == "Reoccuring")
+                    transactions.Add(transaction);
             }
-            throw new NotImplementedException();
+
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name + "\n");
+            sb.Append("Upcomming payments:\n");
+            foreach (var transaction in transactions)
+            {
+                sb.Append(transaction.ToString() + "\n");
+            }
+
+            return sb.ToString();
         }
 
     }

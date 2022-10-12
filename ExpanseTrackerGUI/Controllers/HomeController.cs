@@ -2,8 +2,10 @@
 using ExpanseTrackerDDD.ApplicationLayer.Mappers;
 using ExpanseTrackerDDD.ApplicationLayer.Services;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
+using ExpanseTrackerDDD.DomainModelLayer.Factories;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using ExpanseTrackerDDD.InfrastructureLayer;
+using ExpanseTrackerDDD.InfrastructureLayer.Data;
 using ExpanseTrackerGUI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,18 +20,39 @@ namespace ExpanseTrackerGUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ExpanseTrackerUnitOfWork UnitOfWork;
-        private readonly UserMapper UserMapper;
-        private readonly UserService Service;
-        //private readonly ExpanseTrackerContext Context;
 
-        public HomeController(ILogger<HomeController> logger)
+        // domain event publisher
+        private readonly SimpleEventPublisher DomainEventPublisher;
+        // infrastructure service
+
+        // event listeners
+
+        //unitOfWork
+        private readonly ExpanseTrackerUnitOfWork UnitOfWork;
+
+        // factories
+        UserFactory UserFactory;
+
+        // domain service
+
+        // mappers
+        private readonly UserMapper UserMapper;
+
+        // application services
+        private readonly UserService Service;
+
+        // context
+        private readonly ETContext Context;
+
+        public HomeController(ILogger<HomeController> logger, ETContext context)
         {
             _logger = logger;
-            UnitOfWork = new ExpanseTrackerUnitOfWork();
             UserMapper = new UserMapper();
-            Service = new UserService(UnitOfWork, UserMapper);
-            //Context = context;
+            DomainEventPublisher = new SimpleEventPublisher();
+            UserFactory = new UserFactory(DomainEventPublisher);
+            Context = context;
+            UnitOfWork = new ExpanseTrackerUnitOfWork(Context);
+            Service = new UserService(UnitOfWork, UserFactory);
         }
 
         #region Index
@@ -54,22 +77,36 @@ namespace ExpanseTrackerGUI.Controllers
             }
             catch
             {
-                Debug.WriteLine("TO TRZEBA DOPISAĆ");
+                Debug.WriteLine("złe hasło - TO TRZEBA DOPISAĆ");
             }
-
-            UserDto user = new UserDto();
-            user.Login = userModel.Login;
-            user.FirstName = userModel.FirstName;
-            user.LastName = userModel.LastName;
-            user.Password = userModel.Password;
 
             try
             {
-                Service.CreateUser(user);
+                UserDto userDto = new UserDto()
+                {
+                    Id = new Guid(),
+                    FirstName = userModel.FirstName,
+                    LastName = userModel.LastName,
+                    Login = userModel.Login,
+                    Password = userModel.Password,
+                    AccountDtos = new List<AccountDto>()
+                };
+                try
+                {
+                    var a = Context.Database.CanConnect();
+                    Console.WriteLine(a);
+                }
+                catch
+                {
+                    Debug.WriteLine("aaaaaaaaaaaaaaaaaaaaaaa");
+                }
+                Debug.WriteLine("czy to dziala?");
+                Service.CreateUser(userDto);
+             
             }
             catch
             {
-                Debug.WriteLine("TO TRZEBA DOPISAĆ");
+                Debug.WriteLine("utworzenie usera - TO TRZEBA DOPISAĆ");
             }
 
 

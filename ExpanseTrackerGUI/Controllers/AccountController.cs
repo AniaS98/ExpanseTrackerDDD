@@ -26,9 +26,9 @@ namespace ExpanseTrackerGUI.Controllers
         public AccountController(ILogger<AccountController> logger)
         {
             _logger = logger;
-            UnitOfWork = new ExpanseTrackerUnitOfWork();
+            //UnitOfWork = new ExpanseTrackerUnitOfWork();
             UserMapper = new UserMapper();
-            Service = new UserService(UnitOfWork, UserMapper);
+            //Service = new UserService(UnitOfWork, u);
             //Context = context;
         }
         #region Main

@@ -26,9 +26,9 @@ namespace ExpanseTrackerGUI.Controllers
         public BudgetController(ILogger<BudgetController> logger)
         {
             _logger = logger;
-            UnitOfWork = new ExpanseTrackerUnitOfWork();
+            //UnitOfWork = new ExpanseTrackerUnitOfWork();
             UserMapper = new UserMapper();
-            Service = new UserService(UnitOfWork, UserMapper);
+            //Service = new UserService(UnitOfWork, UserMapper);
             //Context = context;
         }
         #region Budget

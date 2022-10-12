@@ -20,20 +20,29 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
             return result;
         }
 
-        public static BudgetDto Map(Budget budget)
+        public BudgetDto Map(Budget budget)
         {
-            return new BudgetDto()
+            BudgetDto result = new BudgetDto()
             {
                 CurrentValue = Mappers.Map(budget.CurrentValue),
                 EndTime = budget.EndTime,
                 Id = budget.Id,
                 Limit = Mappers.Map(budget.Limit),
-                LimitUtilization = Mappers.Map(budget.LimitUtilization),
+                LimitUtilization = budget.LimitUtilization,
                 Name = budget.Name,
                 StartTime = budget.StartTime,
                 Type = (BudgetTypeDto)budget.Type,
-                UserId = budget.UserId
+                Categories = new List<CategoryDto>(),
+                AccountId = budget.AccountId
             };
+
+            foreach(Category category in budget.Categories)
+            {
+                CategoryDto categoryDto = Mappers.Map(category);
+                result.Categories.Add(categoryDto);
+            }
+
+            return result;
         }
 
 

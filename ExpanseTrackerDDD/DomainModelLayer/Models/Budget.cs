@@ -14,75 +14,67 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         OneTime
     }
 
+    public enum BudgetStatus
+    {
+        Active,
+        Past
+    }
+
     public class Budget : AggregateRoot
     {
         public string Name { get; protected set; }
-        public Guid Id { get; protected set; }
         public Money Limit { get; protected set; }
         public Money CurrentValue { get; protected set; }
-        public Money LimitUtilization { get; protected set; }
+        public decimal LimitUtilization { get; protected set; }
         public BudgetType Type { get; protected set; }
         public DateTime StartTime { get; protected set; }
         public DateTime EndTime { get; protected set; }
-        public Guid UserId { get; protected set; }
-        //public User User { get; protected set; }
-
-        public Budget(Guid id, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
+        public BudgetStatus CurrentStatus { get; protected set; }
+        public Guid AccountId { get; protected set; }
+        
+        private List<Category> _categories;
+        public IEnumerable<Category> Categories
         {
-            this.Id = id;
+            get { return _categories.AsReadOnly(); }
         }
 
-        public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, Guid userId) : base(id, domainEventPublisher)
+        public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, IEnumerable<Category> categories, Guid accountId) : base(id, domainEventPublisher) //obsługa gdy limit jest zerowy
         {
             this.Name = name;
             this.Id = id;
             this.Limit = limit;
-            this.CurrentValue = new Money(0, limit._Currency);
-            this.LimitUtilization = new Money(0,limit._Currency);
+            this.CurrentValue = new Money(0, limit.Currency);
+            this.LimitUtilization = CurrentValue.Amount/Limit.Amount;
             this.Type = type;
             this.StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             this.EndTime = this.StartTime.AddMonths(1).AddDays(-1);
-            this.UserId = userId;
-            //this.User = user;
+            this.CurrentStatus = BudgetStatus.Active;
+            this.AccountId = accountId;
+            this._categories = (List<Category>)categories; 
         }
 
-        public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, DateTime startDate, DateTime endDate, Currency currency, Guid userId) : base(id, domainEventPublisher)
+        public void DeactivateBudget()
         {
-            this.Name = name;
-            this.Id = id;
-            this.Limit = limit;
-            this.CurrentValue = new Money(0, currency);
-            this.Type = type;
-            this.StartTime = startDate;
-            this.EndTime = endDate;
-            this.UserId = userId;
-            //this.User = user;
-        }
-
-        public void RenewBudget(Budget oldBudget)//dopisać żeby raport się restartował dzień po ostatnim dniu budżetu
-        {
-            this.Name = oldBudget.Name;
-            this.Limit = oldBudget.Limit;
-            this.CurrentValue = new Money(0, oldBudget.CurrentValue._Currency);
-            this.Type = oldBudget.Type;
-            this.StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            this.EndTime = this.StartTime.AddMonths(1).AddDays(-1);
-            //this.User = oldBudget.User;
-            this.UserId = oldBudget.UserId;
+            this.CurrentStatus = BudgetStatus.Past;
         }
 
         public void UpdateCurrentValue(Money value)
         {
             this.CurrentValue += value;
-            this.LimitUtilization = this.CurrentValue / this.Limit;
+            this.LimitUtilization = this.CurrentValue.Amount / this.Limit.Amount;
         }
 
         public void UpdateLimit(Money limit)
         {
             this.Limit = limit;
-            this.LimitUtilization = this.CurrentValue / this.Limit;
-
+            this.LimitUtilization = this.CurrentValue.Amount / this.Limit.Amount;
         }
+
+        public void ChangeCategories(List<Category> newCategories)
+        {
+            _categories = newCategories;
+        }
+
 
 
     }

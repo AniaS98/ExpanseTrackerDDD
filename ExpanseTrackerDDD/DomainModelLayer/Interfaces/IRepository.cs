@@ -6,13 +6,14 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity: AggregateRoot
+    public interface IRepository<TEntity> where TEntity: class
     {
         TEntity Get(Guid id);
         IList<TEntity> GetAll();
         IList<TEntity> Find(Expression<Func<TEntity, bool>> expression);
         void Insert(TEntity entity);
         void Delete(TEntity entity);
+        void Update(TEntity entity);
 
     }
 }
