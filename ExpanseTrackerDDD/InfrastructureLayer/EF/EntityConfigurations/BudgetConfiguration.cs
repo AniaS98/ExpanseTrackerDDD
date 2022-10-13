@@ -20,9 +20,13 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             //builder.Ignore(a => a.DomainEventPublisher);
             builder.Property<Guid>("AccountId").IsRequired();
 
-            // Relacja 1:N pomiędzy Account i Budget ?
+            // Relacja 1:N pomiędzy Account i Budget 
             builder.HasOne<Account>().WithMany().IsRequired(false).HasForeignKey("AccountId");
 
+            // Relacja 1:N pomiędzy Budget i Category
+            builder.OwnsMany(b => b.Categories);
+
+            //Relacja 1:1 pomiędzy Budget i Money
             builder.OwnsOne(b => b.CurrentValue);
             builder.OwnsOne(b => b.Limit);        
         }

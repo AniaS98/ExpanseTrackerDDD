@@ -35,13 +35,8 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
             builder.ApplyConfiguration(new BudgetConfiguration());
             builder.ApplyConfiguration(new TransactionConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new CategoryConfiguration());
-            builder.ApplyConfiguration(new MoneyConfiguration());
-            
-            
             builder.ApplyConfiguration(new RecurrencyConfiguration());
-            
-            
+            builder.ApplyConfiguration(new CategoryConfiguration());
         }
 
 

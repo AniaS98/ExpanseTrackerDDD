@@ -17,6 +17,9 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             //builder.Property<Guid>("Id").IsRequired();
             //builder.HasKey("Id");
 
+            // Relacja 1:N pomiędzy Budget i Category
+            
+
         }
     }
 }
