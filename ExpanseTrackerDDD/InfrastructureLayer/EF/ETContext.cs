@@ -31,12 +31,13 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
         {
             base.OnModelCreating(builder);
 
+            builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new AccountConfiguration());
             builder.ApplyConfiguration(new BudgetConfiguration());
             builder.ApplyConfiguration(new TransactionConfiguration());
-            builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new RecurrencyConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
+            //Money
         }
 
 
