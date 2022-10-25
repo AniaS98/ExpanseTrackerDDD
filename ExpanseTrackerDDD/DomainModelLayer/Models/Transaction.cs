@@ -46,7 +46,9 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public string Contractor { get; protected set; }
         public Guid AccountId { get; protected set; }
 
-        public Transaction(Guid id, IDomainEventPublisher domainEventPublisher, string description, TransactionType type, Money value, Category category, Recurrency recurrency, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note="") : base(id, domainEventPublisher)
+        public Transaction() { }
+
+        public Transaction(Guid id, string description, TransactionType type, Money value, Category category, Recurrency recurrency, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note="") : base(id)
         {
             this.Id = id;
             this.Description = description;

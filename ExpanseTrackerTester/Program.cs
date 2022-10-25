@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.BudgetCommands;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers;
 using ExpanseTrackerDDD.ApplicationLayer.DTOs;
@@ -20,6 +21,17 @@ namespace Tester
     {
         static void Main(string[] args)
         {
+            string path = @"C:\Users\AnnaSzmit\Documents\My project\Program\ExpanseTrackerTester\bin\Debug\netcoreapp3.1";
+            string[] fileNames = { "ExpanseTrackerDDD_Base.db", "ExpanseTrackerDDD_Base.db-shm", "ExpanseTrackerDDD_Base.db-wal" };
+            for (int i = 0; i < fileNames.Length; i++)
+            {
+                if (File.Exists(Path.Combine(path, fileNames[i])))
+                {
+                    File.Delete(Path.Combine(path, fileNames[i]));
+                }
+            }
+
+
             //Konfiguracja Kontenera
             IServiceCollection serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
@@ -47,7 +59,7 @@ namespace Tester
 
 
             // event publishers
-            serviceCollection.AddSingleton<IDomainEventPublisher>();
+            //serviceCollection.AddSingleton<IDomainEventPublisher>();
 
             //UoW + repos
             serviceCollection.AddSingleton<IExpanseTrackerUnitOfWork, ExpanseTrackerUnitOfWork>();
@@ -61,7 +73,7 @@ namespace Tester
             serviceCollection.AddSingleton<AccountFactory>();
             serviceCollection.AddSingleton<BudgetFactory>();
             serviceCollection.AddSingleton<TransactionFactory>();
-            serviceCollection.AddSingleton<IDomainService>();//tu chyba jeszcze brakuje
+            //serviceCollection.AddSingleton<IDomainService>();//tu chyba jeszcze brakuje
             //Resztę serwisów przesunąć do Domeny???
             serviceCollection.AddSingleton<AccountMapper>();
             serviceCollection.AddSingleton<BudgetMapper>();

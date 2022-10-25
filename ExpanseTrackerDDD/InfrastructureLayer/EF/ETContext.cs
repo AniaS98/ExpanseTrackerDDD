@@ -16,9 +16,9 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Budget> Budgets { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Money> Monies { get; set; }
-        public DbSet<Recurrency> Recurrencies { get; set; }
+        //public DbSet<Category> Categories { get; set; }
+        //public DbSet<Money> Monies { get; set; }
+        //public DbSet<Recurrency> Recurrencies { get; set; }
 
 
         public ETContext(DbContextOptions<ETContext> options) : base(options) 
@@ -37,6 +37,7 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new RecurrencyConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new MoneyConfiguration());
         }
 
 

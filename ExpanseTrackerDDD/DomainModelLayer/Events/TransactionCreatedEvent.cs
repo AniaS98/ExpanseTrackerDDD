@@ -8,7 +8,7 @@ using ExpanseTrackerDDD.InfrastructureLayer.EF;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Events
 {
-    public class TransactionCreatedEvent : IDomainEvent
+    public class TransactionCreatedEvent //: IDomainEvent
     {
         public string Description { get; protected set; }
         public TransactionType Type { get; protected set; }

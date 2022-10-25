@@ -38,7 +38,9 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             get { return _categories.AsReadOnly(); }
         }
 
-        public Budget(Guid id, IDomainEventPublisher domainEventPublisher, string name, Money limit, BudgetType type, IEnumerable<Category> categories, Guid accountId) : base(id, domainEventPublisher) //obsługa gdy limit jest zerowy
+        protected Budget() { }
+
+        public Budget(Guid id, string name, Money limit, BudgetType type, IEnumerable<Category> categories, Guid accountId) : base(id) //obsługa gdy limit jest zerowy
         {
             this.Name = name;
             this.Id = id;

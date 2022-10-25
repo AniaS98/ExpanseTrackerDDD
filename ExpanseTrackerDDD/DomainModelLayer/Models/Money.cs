@@ -25,7 +25,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         SELL
     }
 
-    [Owned]
     public class Money : ValueObject
     {
         public decimal Amount { get; protected set; }

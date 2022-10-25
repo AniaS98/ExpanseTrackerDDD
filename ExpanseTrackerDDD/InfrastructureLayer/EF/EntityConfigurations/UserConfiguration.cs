@@ -18,6 +18,7 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             //Ustawienie klucza obcego
             builder.Property(a => a.Id).ValueGeneratedNever();
             //builder.Ignore(a => a.DomainEventPublisher);
+            
 
         }
     }

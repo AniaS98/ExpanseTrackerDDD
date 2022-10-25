@@ -9,11 +9,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 {
     public class TransactionFactory
     {
-        private IDomainEventPublisher _domainEventPublisher;
+        
 
-        public TransactionFactory(IDomainEventPublisher domainEventPublisher)
+        public TransactionFactory()
         {
-            this._domainEventPublisher = domainEventPublisher;
         }
         //Muszę jeszcze dodać opcje nasłuchiwania transakcji przez budżet żeby zmieniła się wartość obecnego wykorzystania limitu
         public Transaction CreateTransaction(Guid id, string description, TransactionType type, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note = "")
@@ -69,12 +68,12 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 
             Category category = new Category(categoryName, categorySubcategoryName);
 
-            return new Transaction(id, _domainEventPublisher, description, type, value, category, recurrency, transactionDate, status, accountId, contractor, note);
+            return new Transaction(id, description, type, value, category, recurrency, transactionDate, status, accountId, contractor, note);
         }
 
         public Transaction CreateTransfer(Transaction from, Guid destinationAccountId)
         {
-            return new Transaction(new Guid(), _domainEventPublisher, from.Description, from.Type, from.Value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
+            return new Transaction(new Guid(),from.Description, from.Type, from.Value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
         }
 
         public Transaction Exchange(Transaction from, Guid destinationAccountId, CurrencyName newCurrency)
@@ -83,7 +82,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 
             var task = Task.Run(async () => await value.UpdateCurrentValue(value.Currency, newCurrency));
 
-            return new Transaction(new Guid(), _domainEventPublisher, from.Description, from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
+            return new Transaction(new Guid(),  from.Description, from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
 
         }
 

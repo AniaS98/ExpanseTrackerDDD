@@ -26,9 +26,9 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             //builder.Property<Recurrency>("TransactionRecurrency").IsRequired(false);
             //builder.Property<Category>("TransactionCategory").IsRequired(false);
 
-            builder.OwnsOne(t => t.TransactionCategory);
-            builder.OwnsOne(t => t.TransactionRecurrency);
-            builder.OwnsOne(t => t.Value);
+            builder.HasOne(t => t.TransactionCategory);
+            builder.HasOne(t => t.TransactionRecurrency);
+            builder.HasOne(t => t.Value);
 
         }
     }

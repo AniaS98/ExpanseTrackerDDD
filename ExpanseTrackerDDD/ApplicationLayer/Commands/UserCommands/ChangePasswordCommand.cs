@@ -8,7 +8,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.UserCommands
     public class ChangePasswordCommand
     {
         public Guid Id { get; set; }
-        public SecureString Password { get; set; }
-        public SecureString RepeatPassword { get; set; }
+        public string Password { get; set; }
+        public string RepeatPassword { get; set; }
     }
 }

@@ -8,11 +8,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 {
     public class AccountFactory
     {
-        private IDomainEventPublisher _domainEventPublisher;
+        
 
-        public AccountFactory(IDomainEventPublisher domainEventPublisher)
+        public AccountFactory()
         {
-            this._domainEventPublisher = domainEventPublisher;
         }
 
 

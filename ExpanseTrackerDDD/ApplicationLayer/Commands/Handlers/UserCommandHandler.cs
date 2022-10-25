@@ -12,12 +12,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
     public class UserCommandHandler
     {
         private IExpanseTrackerUnitOfWork _unitOfWork;
-        private IDomainEventPublisher _domainEventPublisher;
+        
         //wyczyścić konstruktor
-        public UserCommandHandler(IExpanseTrackerUnitOfWork unitOfWork, IDomainEventPublisher domainEventPublisher)
+        public UserCommandHandler(IExpanseTrackerUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _domainEventPublisher = domainEventPublisher;
         }
 
 
@@ -34,7 +33,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //CHYBA BEZ TRY CATCHA
             UserHelper.VerifyPasswords(command.Password, command.RepeatPassword);
 
-            user = new User(command.Id, command.Login, command.Password, command.FirstName, command.LastName);
+            user = new User(command.Id,  command.Login, command.Password, command.FirstName, command.LastName);
 
             this._unitOfWork.UserRepository.Insert(user);
             this._unitOfWork.Commit();
@@ -47,8 +46,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             if (user == null)
                 throw new Exception("Incorrect login");
 
-            if (user.Password != command.Password)
-                throw new Exception("Incorrect password");
+            //if (user.Password != command.Password)
+              //  throw new Exception("Incorrect password");
         }
 
         public void Execute(ChangePasswordCommand command)
@@ -57,8 +56,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
 
             User user = _unitOfWork.UserRepository.Get(command.Id);
 
-            if (user.Password == command.Password)
-                throw new Exception("New password is the same as the old one");
+            //if (user.Password == command.Password)
+              //  throw new Exception("New password is the same as the old one");
 
             user.UpdatePassword(command.Password);
             this._unitOfWork.UserRepository.Update(user);

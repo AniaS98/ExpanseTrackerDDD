@@ -14,6 +14,9 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models.Basic
             this.Id = id;
         }
 
+        public Entity()
+        { }
+
 
     }
 }

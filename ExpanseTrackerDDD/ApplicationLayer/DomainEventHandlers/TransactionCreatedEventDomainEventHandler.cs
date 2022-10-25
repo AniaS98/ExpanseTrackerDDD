@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers
 {
-    public class TransactionCreatedEventDomainEventHandler : IEventHandler<TransactionCreatedEvent>
+    public class TransactionCreatedEventDomainEventHandler //: IEventHandler<TransactionCreatedEvent>
     {
         private IBudgetRepository _budgetRepository;
 

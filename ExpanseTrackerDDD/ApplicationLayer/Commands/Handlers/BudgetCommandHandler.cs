@@ -16,16 +16,14 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
         private AccountFactory _accountFactory;
         private BudgetFactory _budgetFactory;
         private TransactionFactory _transactionFactory;
-        private IDomainEventPublisher _domainEventPublisher;
+        
 
-        public BudgetCommandHandler(IExpanseTrackerUnitOfWork unitOfWork, AccountFactory accountFactory, BudgetFactory budgetFactory, TransactionFactory transactionFactory, IDomainEventPublisher domainEventPublisher)
+        public BudgetCommandHandler(IExpanseTrackerUnitOfWork unitOfWork, AccountFactory accountFactory, BudgetFactory budgetFactory, TransactionFactory transactionFactory)
         {
             _unitOfWork = unitOfWork;
             _accountFactory = accountFactory;
             _budgetFactory = budgetFactory;
             _transactionFactory = transactionFactory;
-
-            _domainEventPublisher = domainEventPublisher;
         }
 
         public void Execute(CreateBudgetCommand command)
@@ -47,7 +45,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
                 categories.Add(cat);
             }
 
-            Budget budget = new Budget(command.Id, _domainEventPublisher, command.Name, limit, command.Type, categories, command.AccountId);
+            Budget budget = new Budget(command.Id, command.Name, limit, command.Type, categories, command.AccountId);
             this._unitOfWork.BudgetRepository.Insert(budget);
             this._unitOfWork.Commit();
         }
@@ -71,7 +69,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
 
                         if(b.Type == BudgetType.Monthly)
                         {
-                            Budget budget = new Budget(new Guid(), _domainEventPublisher, b.Name, b.Limit, BudgetType.Monthly, b.Categories, b.AccountId);
+                            Budget budget = new Budget(new Guid(),  b.Name, b.Limit, BudgetType.Monthly, b.Categories, b.AccountId);
                             this._unitOfWork.BudgetRepository.Insert(budget);
                         }
                     }

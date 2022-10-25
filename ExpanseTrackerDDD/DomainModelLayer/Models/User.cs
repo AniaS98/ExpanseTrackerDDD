@@ -9,15 +9,16 @@ using ExpanseTrackerDDD.DomainModelLayer.Events;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {
-    public class User : Entity
+    public class User : AggregateRoot
     {
         public string Login { get; protected set; }
-        public SecureString Password { get; protected set; } 
+        public string Password { get; protected set; } 
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
 
+        public User() { }
 
-        public User(Guid id, string login, SecureString password, string firstName, string lastName) : base(id)
+        public User(Guid id, string login, string password, string firstName, string lastName) : base(id)
         {
             this.Id = id;
             this.Login = login;
@@ -26,7 +27,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.LastName = lastName;
         }
 
-        public void UpdatePassword(SecureString newPassword)
+        public void UpdatePassword(string newPassword)
         {
             this.Password = newPassword;
         }

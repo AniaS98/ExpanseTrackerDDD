@@ -20,7 +20,7 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             //builder.Ignore(a => a.DomainEventPublisher);
             builder.Property<Guid>("UserId").IsRequired();
 
-            builder.OwnsOne(a => a.Balance);
+            builder.HasOne(a => a.Balance);
 
             // Relacja 1:N pomiędzy User i Account
             builder.HasOne<User>().WithMany().IsRequired(false).HasForeignKey("UserId");

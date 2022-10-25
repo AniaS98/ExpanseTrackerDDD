@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Events.Listeners
 {
-    public class TransactionCreatedEventListener : IEventListener<TransactionCreatedEvent>
+    public class TransactionCreatedEventListener //: IEventListener<TransactionCreatedEvent>
     {
         
         public void Handle(TransactionCreatedEvent eventData)

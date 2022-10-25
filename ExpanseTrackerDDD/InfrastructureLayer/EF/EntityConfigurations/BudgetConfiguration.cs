@@ -24,11 +24,11 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             builder.HasOne<Account>().WithMany().IsRequired(false).HasForeignKey("AccountId");
 
             // Relacja 1:N pomiędzy Budget i Category
-            builder.OwnsMany(b => b.Categories);
+            builder.HasMany(b => b.Categories);
 
             //Relacja 1:1 pomiędzy Budget i Money
-            builder.OwnsOne(b => b.CurrentValue);
-            builder.OwnsOne(b => b.Limit);        
+            builder.HasOne(b => b.CurrentValue);
+            builder.HasOne(b => b.Limit);        
         }
     }
 }

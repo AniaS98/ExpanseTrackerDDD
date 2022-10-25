@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Events
 {
-    public class SimpleEventPublisher  :IDomainEventPublisher
+    public class SimpleEventPublisher  //:IDomainEventPublisher
     {
         private Dictionary<string, HashSet<IEventListener>> _eventHandlers = new Dictionary<string, HashSet<IEventListener>>();
 

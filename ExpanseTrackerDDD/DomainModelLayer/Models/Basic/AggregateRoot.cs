@@ -7,16 +7,15 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models.Basic
 {
     public abstract class AggregateRoot : Entity, IAggregateRoot
     {
-        protected IDomainEventPublisher DomainEventPublisher { get; set; }
+        //protected IDomainEventPublisher DomainEventPublisher { get; set; }
 
-        public AggregateRoot(Guid id, IDomainEventPublisher domainEventPublisher) : base(id)
+        public AggregateRoot(Guid id) : base(id)
         {
-            if (domainEventPublisher == null)
-                throw new ArgumentNullException("EventPublisher is not initialized");
 
-            this.DomainEventPublisher = domainEventPublisher;
         }
 
+        public AggregateRoot()
+        { }
 
     }
 }

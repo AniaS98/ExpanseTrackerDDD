@@ -27,7 +27,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         Endless
     }
 
-    [Owned]
     public class Recurrency : ValueObject
     {
         public RecurrencyType Type { get; protected set; }

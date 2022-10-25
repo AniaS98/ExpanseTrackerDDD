@@ -13,13 +13,12 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
     {
         private IExpanseTrackerUnitOfWork _unitOfWork;
         private TransactionFactory _transactionFactory;
-        private IDomainEventPublisher _domainEventPublisher;
+        
 
-        public TransactionCommandHandler(IExpanseTrackerUnitOfWork unitOfWork, TransactionFactory transactionFactory, IDomainEventPublisher domainEventPublisher)
+        public TransactionCommandHandler(IExpanseTrackerUnitOfWork unitOfWork, TransactionFactory transactionFactory)
         {
             _unitOfWork = unitOfWork;
             _transactionFactory = transactionFactory;
-            _domainEventPublisher = domainEventPublisher;
         }
 
         public void Execute(CreateTransactionCommand command)

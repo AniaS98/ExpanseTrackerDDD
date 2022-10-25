@@ -11,13 +11,12 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
     public class AccountCommandHandler
     {
         private IExpanseTrackerUnitOfWork _unitOfWork;
-        private IDomainEventPublisher _domainEventPublisher;
+        
 
-        public AccountCommandHandler(IExpanseTrackerUnitOfWork unitOfWork, IDomainEventPublisher domainEventPublisher)
+        public AccountCommandHandler(IExpanseTrackerUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
 
-            _domainEventPublisher = domainEventPublisher;
         }
 
         public void Execute(CreateAccountCommand command)
@@ -39,7 +38,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
                 throw new Exception($"Account with number '{command.AccountNumber}' already exists!");
 
 
-            account = new Account(new Guid(), _domainEventPublisher, command.Name, command.AccountNumber, command.Type, command.CurrencyName, command.UserId);
+            account = new Account(new Guid(), command.Name, command.AccountNumber, command.Type, command.CurrencyName, command.UserId);
 
             this._unitOfWork.AccountRepository.Insert(account);
             this._unitOfWork.Commit();

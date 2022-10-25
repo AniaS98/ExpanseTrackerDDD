@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ReportCreator.DomainModelLayer.Events
 {
-    public class TransactionCreatedEvent : IDomainEvent
+    public class TransactionCreatedEvent //: IDomainEvent
     {
         public string Name { get;  set; }
         public decimal MoneyAmount { get; protected set; }

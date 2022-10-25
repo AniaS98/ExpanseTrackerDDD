@@ -9,8 +9,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.UserCommands
     {
         public Guid Id { get; set; }
         public string Login { get; set; }
-        public SecureString Password { get; set; }
-        public SecureString RepeatPassword { get; set; }
+        public string Password { get; set; }
+        public string RepeatPassword { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }

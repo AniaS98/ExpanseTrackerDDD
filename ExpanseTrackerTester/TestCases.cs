@@ -15,7 +15,7 @@ namespace Tester
 {
     public class TestCases
     {
-        private IServiceProvider _serviceProvide;
+        private IServiceProvider _serviceProvider;
 
         private UserCommandHandler _userCommandHandler;
         private AccountCommandHandler _accountCommandHandler;
@@ -25,26 +25,30 @@ namespace Tester
 
         public TestCases(IServiceCollection serviceCollection)
         {
-            _serviceProvide = serviceCollection.BuildServiceProvider();
+            _serviceProvider = serviceCollection.BuildServiceProvider();
 
-            _userCommandHandler = _serviceProvide.GetRequiredService<UserCommandHandler>();
-            _queryHandler = _serviceProvide.GetRequiredService<QueryHandler>();
+            _userCommandHandler = _serviceProvider.GetRequiredService<UserCommandHandler>();
+            _accountCommandHandler = _serviceProvider.GetRequiredService<AccountCommandHandler>();
+            _budgetCommandHandler = _serviceProvider.GetRequiredService<BudgetCommandHandler>();
+            _transactionCommandHandler = _serviceProvider.GetRequiredService<TransactionCommandHandler>();
+
+            _queryHandler = _serviceProvider.GetRequiredService<QueryHandler>();
         }
 
         public void Run()
         {
             //Tworzenie użytkownika
             //hasło
-            SecureString password = new SecureString();
+            string password = "asd"; // new SecureString();
             string pas = "admin123";
-            foreach (char c in pas)
-                password.AppendChar(c);
+            //foreach (char c in pas)
+            //  password.AppendChar(c);
             //ID
-            Guid id = new Guid();
+            Guid userId = Guid.NewGuid();
 
             _userCommandHandler.Execute(new CreateUserCommand()
             {
-                Id = id,
+                Id = userId,
                 FirstName = "Krzysztof",
                 LastName = "Pazór",
                 Login = "kPaz",
@@ -54,36 +58,37 @@ namespace Tester
             Console.WriteLine("Account created");
 
             var users = _queryHandler.Execute(new GetAllUsersQuery());
-
+            Console.WriteLine(users);
             //Tworzenie 2 kont
-            Guid pkoId = new Guid();
+            Guid a1 = Guid.NewGuid();
             _accountCommandHandler.Execute(new CreateAccountCommand()
             {
-                Id = new Guid(),
+                Id = a1,
                 AccountNumber = "123",
                 Color = "green",
                 CurrencyName = CurrencyName.PLN,
                 Name = "PKO",
                 Type = AccountType.BankAccount,
-                UserId = id
+                UserId = userId
             });
 
-            Guid hsbcId = new Guid();
+            Guid a2 = Guid.NewGuid();
             _accountCommandHandler.Execute(new CreateAccountCommand()
             {
-                Id = new Guid(),
+                Id = a2,
                 AccountNumber = "456",
                 Color = "yellow",
                 CurrencyName = CurrencyName.GBP,
                 Name = "HSBC",
                 Type = AccountType.BankAccount,
-                UserId = id
+                UserId = userId
             });
 
             //Przykładowe transakcje
+            Guid t1 = Guid.NewGuid();
             _transactionCommandHandler.Execute(new CreateTransactionCommand()
             {
-                AccountId = pkoId,
+                Id = t1,
                 Amount = 10.3m,
                 Currency = CurrencyName.PLN,
                 CatName = CategoryName.Food,
@@ -93,12 +98,14 @@ namespace Tester
                 TransactionType = TransactionType.Expanse,
                 TransactionDate = new DateTime(2022,9,1),
                 Status = TransactionStatus.Settled,
-                Note = "bardzo dobre ciastko"                
+                Note = "bardzo dobre ciastko",
+                AccountId = a1
             });
 
+            Guid t2 = Guid.NewGuid();
             _transactionCommandHandler.Execute(new CreateTransactionCommand()
             {
-                AccountId = pkoId,
+                Id = t2,
                 Amount = 10.3m,
                 Currency = CurrencyName.PLN,
                 CatName = CategoryName.Food,
@@ -108,7 +115,8 @@ namespace Tester
                 TransactionType = TransactionType.Expanse,
                 TransactionDate = new DateTime(2022, 9, 1),
                 Status = TransactionStatus.Settled,
-                Note = "bardzo dobre ciastko"
+                Note = "bardzo dobre ciastko",
+                AccountId = a1
             });
 
 

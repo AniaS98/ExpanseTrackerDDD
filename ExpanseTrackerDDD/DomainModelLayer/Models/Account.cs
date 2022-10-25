@@ -29,8 +29,9 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public string Color { get; protected set; }
         public Guid UserId { get; protected set; } 
 
+        protected Account(){}
 
-        public Account(Guid id, IDomainEventPublisher domainEventPublisher, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m) : base(id, domainEventPublisher)
+        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m) : base(id)
         {
             this.Id = id;
             this.Balance = new Money(balance, currencyName);
@@ -43,7 +44,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.UserId = userId;
         }
 
-        public Account(Guid id, IDomainEventPublisher domainEventPublisher, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, string color, decimal balance = 0.0m) : base(id, domainEventPublisher)
+        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, string color, decimal balance = 0.0m) : base(id)
         {
             this.Id = id;
             this.Balance = new Money(balance, currencyName);

@@ -68,8 +68,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         Others
     }
 
-
-    [Owned]
     public class Category : ValueObject
     {
         public CategoryName Name { get; protected set; }
