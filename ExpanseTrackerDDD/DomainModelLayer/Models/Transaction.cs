@@ -12,7 +12,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
     {
         Settled,
         Upcomming,
-        Planned,
         Owed
     }
 
@@ -29,7 +28,8 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         Transfer,
         Exchange,
         Borrowed,
-        Lent
+        Lent,
+        Returned
     }
 
     public class Transaction : AggregateRoot
@@ -48,7 +48,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
 
         public Transaction() { }
 
-        public Transaction(Guid id, string description, TransactionType type, Money value, Category category, Recurrency recurrency, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note="") : base(id)
+        public Transaction(Guid id, TransactionType type, Money value, Category category, Recurrency recurrency, DateTime transactionDate, TransactionStatus status, Guid accountId, string description="", string contractor = "", string note="") : base(id)
         {
             this.Id = id;
             this.Description = description;
@@ -64,12 +64,12 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Note = note;
         }
 
-        public void UpdateTransaction(string description, TransactionType type, Money value, Category category, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor, string note)
+        public void UpdateTransaction(string description, Money value, Category category, DateTime transactionDate, Recurrency recurrency, TransactionStatus status, Guid accountId, string contractor, string note)
         {
             this.Description = description;
-            this.Type = type;
             this.Value = value;
             this.TransactionCategory = category;
+            this.TransactionRecurrency = recurrency;
             this.TransactionDate = transactionDate;
             this.Status = status;
             this.Frequency = TransactionFrequency.OneTime;
@@ -79,9 +79,17 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Note = note;
         }
 
+        //chyba trzeba też dać usunięcie 
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Transaction: " + Id + "\n");
+            sb.Append("Value: " + Value.ToString()+ "\n");
+            sb.Append("Date: " + TransactionDate.ToString("dd/MM/yyyy") + "\n");
+            sb.Append("Description: " + Description + "\n");
 
-
-
+            return sb.ToString();
+        }
     }
 }

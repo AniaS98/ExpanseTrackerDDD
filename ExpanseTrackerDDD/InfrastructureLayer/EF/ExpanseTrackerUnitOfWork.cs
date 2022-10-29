@@ -7,12 +7,16 @@ using System.Text;
 //using System.Data.Entity;
 using ExpanseTrackerDDD.DomainModelLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
+using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
 
 namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 {
     public class ExpanseTrackerUnitOfWork : IExpanseTrackerUnitOfWork
     {
-        public ETContext Context; //private readonly
+        private ETContext Context;
+        private IDomainEventDispatcher eventDispatcher;
+
         public IUserRepository UserRepository { get; }
 
         public IAccountRepository AccountRepository { get; }
@@ -32,6 +36,26 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 
         public void Commit()
         {
+            //Pobieranie wszytkich zmian
+            var domainEventEntities = Context.ChangeTracker.Entries<Entity>()
+                .Select(x => x.Entity)
+                .Where(x => x.DomainEvents.Any()).ToArray();
+
+            //Iteraja po wszystkich entity, w których zaszły zmiany
+            foreach (var e in domainEventEntities)
+            {
+                //Pobieranie wszystkich zdarzeń danego entity
+                var events = e.DomainEvents.ToArray();
+                //Czyszczenie listy zdarzeń
+                e.DomainEvents.Clear();
+                //Obsługa zdarzeń
+                foreach (var de in events)
+                {
+                    eventDispatcher.Dispatch(de);
+                }
+            }
+
+
             Context.SaveChanges();
         }
 
@@ -56,5 +80,6 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
         {
             Context.Dispose();
         }
+
     }
 }

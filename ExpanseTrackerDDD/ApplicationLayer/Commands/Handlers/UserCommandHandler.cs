@@ -19,55 +19,86 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             _unitOfWork = unitOfWork;
         }
 
-
+        /// <summary>
+        /// Metoda tworząca nowy obiekt User
+        /// </summary>
+        /// <param name="command"></param>
         public void Execute(CreateUserCommand command)
         {
+            //Sprawdzenie czy użytkownik istnieje
             User user = this._unitOfWork.UserRepository.Get(command.Id);
             if (user != null)
                 throw new Exception($"User with Id '{command.Id}' already exists!");
-
             user = this._unitOfWork.UserRepository.GetUserByLogin(command.Login);
             if (user != null)
                 throw new Exception($"User with login '{command.Login}' already exists!");
 
-            //CHYBA BEZ TRY CATCHA
-            UserHelper.VerifyPasswords(command.Password, command.RepeatPassword);
+            //Sprawdzenie czy oba hasła spełniają wymagania oraz czy się zgadzają
+            UserHelper.PasswordValidation(command.Password, command.RepeatPassword);
 
+            //Utworzenie nowego użytkownika
             user = new User(command.Id,  command.Login, command.Password, command.FirstName, command.LastName);
-
             this._unitOfWork.UserRepository.Insert(user);
+
             this._unitOfWork.Commit();
         }
 
+        /// <summary>
+        /// Metoda służąca do logowania
+        /// </summary>
+        /// <param name="command"></param>
         public void Execute(LoginCommand command)
         {
-            //Czy to tutaj pisać?
+            //Wyszukanie uźytkownika
             User user = _unitOfWork.UserRepository.GetUserByLogin(command.Login);
             if (user == null)
                 throw new Exception("Incorrect login");
 
-            //if (user.Password != command.Password)
-              //  throw new Exception("Incorrect password");
+            //Weryfikacja czy podane hasło zgadza się z tym przypisanym do uźytkownika
+            UserHelper.PasswordVerification(user.Password, command.Password);
         }
 
+        /// <summary>
+        /// Metoda pozwalająca na zmianę hasła
+        /// </summary>
+        /// <param name="command"></param>
         public void Execute(ChangePasswordCommand command)
         {
-            UserHelper.VerifyPasswords(command.Password, command.RepeatPassword);
-
+            //Wyszukanie uźytkownika
             User user = _unitOfWork.UserRepository.Get(command.Id);
+            if (user == null)
+                throw new Exception($"User with Id '{command.Id}' already exists!");
 
-            //if (user.Password == command.Password)
-              //  throw new Exception("New password is the same as the old one");
+            //Sprawdzenie czy oba hasła spełniają wymagania oraz czy się zgadzają
+            UserHelper.PasswordValidation(command.Password, command.RepeatPassword);
 
+            //Sprawdzenie czy nowe hasło nie jest takie samo jak poprzednie
+            if (user.Password == command.Password)
+                throw new Exception("New password is the same as the old one");
+
+            //Aktualizacja hasła
             user.UpdatePassword(command.Password);
             this._unitOfWork.UserRepository.Update(user);
+            
             this._unitOfWork.Commit();
         }
 
+        /// <summary>
+        /// Usunięcie użytkownika
+        /// </summary>
+        /// <param name="command"></param>
+        public void Execute(DeleteUserCommand command)
+        {
+            //Sprawdzenie czy użytkownik istnieje
+            User user = _unitOfWork.UserRepository.Get(command.Id);
+            if (user == null)
+                throw new Exception($"User with Id '{command.Id}' already exists!");
 
+            //Usunięcie użytkownika
+            this._unitOfWork.UserRepository.Delete(user);
 
-
-
+            this._unitOfWork.Commit();
+        }
 
 
     }

@@ -11,66 +11,82 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
     public class AccountCommandHandler
     {
         private IExpanseTrackerUnitOfWork _unitOfWork;
-        
 
         public AccountCommandHandler(IExpanseTrackerUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-
         }
 
+        /// <summary>
+        /// Metoda tworząca konto
+        /// </summary>
+        /// <param name="command"></param>
         public void Execute(CreateAccountCommand command)
         {
+            //Sprawdzenie, czy uźytkownik istnieje
             User user = this._unitOfWork.UserRepository.Get(command.UserId);
             if (user == null)
                 throw new Exception($"User with Id '{command.UserId}' does not exist!");
-
+            
+            //Sprawdzenie, czy konto może zostać utworzone
             Account account = this._unitOfWork.AccountRepository.Get(command.Id);
             if (account != null)
                 throw new Exception($"Account with Id '{command.Id}' already exists!");
-
             account = this._unitOfWork.AccountRepository.GetAccountByName(command.Name);
             if (account != null)
                 throw new Exception($"Account with name '{command.Name}' already exists!");
-
             account = this._unitOfWork.AccountRepository.GetAccountByNumber(command.AccountNumber);
             if (account != null)
                 throw new Exception($"Account with number '{command.AccountNumber}' already exists!");
 
-
-            account = new Account(new Guid(), command.Name, command.AccountNumber, command.Type, command.CurrencyName, command.UserId);
-
+            //Utworzenie konta
+            account = new Account(command.Id, command.Name, command.AccountNumber, command.Type, command.CurrencyName, command.UserId);
             this._unitOfWork.AccountRepository.Insert(account);
+
             this._unitOfWork.Commit();
         }
 
+        /// <summary>
+        /// Metoda aktualizująca konto
+        /// </summary>
+        /// <param name="command"></param>
         public void Execute(UpdateAccount command)
         {
+            //Sprawdzenie, czy konto istnieje
             Account account = this._unitOfWork.AccountRepository.Get(command.Id);
             if (account == null)
                 throw new Exception($"Account with Id '{command.Id}' does not exist!");
-
+            
+            //Aktualizacja poszczególnych elementów
             if (command.Name != account.Name)
                 account.UpdateName(command.Name);
-            if (command.Color != account.Color)
-                account.UpdateColor(command.Color);
             if (command.AccountNumber != account.AccountNumber)
                 account.UpdateAccountNumber(command.AccountNumber);
             if (command.Type != account.Type)
                 account.UpdateType(command.Type);
-
+            
+            //Aktualizacja bazy
             this._unitOfWork.AccountRepository.Update(account);
-            this._unitOfWork.Commit();
 
+            this._unitOfWork.Commit();
         }
 
+        /// <summary>
+        /// Usunięcie konta
+        /// </summary>
+        /// <param name="command"></param>
+        public void Execute(DeleteAccountCommand command)
+        {
+            //Sprawdzenie, czy konto istnieje
+            Account account = this._unitOfWork.AccountRepository.Get(command.Id);
+            if (account == null)
+                throw new Exception($"Account with Id '{command.Id}' does not exist!");
 
+            //Usunięcie konta
+            this._unitOfWork.AccountRepository.Delete(account);
 
-
-
-
-
-
+            this._unitOfWork.Commit();
+        }
 
     }
 }

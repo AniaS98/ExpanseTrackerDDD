@@ -17,5 +17,10 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
     {
         public decimal Amount { get; set; }
         public CurrencyNameDto Currency { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Math.Round(Amount, 2), Currency);
+        }
     }
 }

@@ -11,9 +11,10 @@ using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Factories;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using ExpanseTrackerDDD.DomainModelLayer.Repositories;
-using ExpanseTrackerDDD.DomainModelLayer.Services;
+using ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers;
 using ExpanseTrackerDDD.InfrastructureLayer.EF;
 using Microsoft.Extensions.DependencyInjection;
+using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
 
 namespace Tester
 {
@@ -46,6 +47,10 @@ namespace Tester
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
         {
+            // event publishers and handlers - czy w tym podejściu tak trzeba robić?
+            serviceCollection.AddSingleton<IDomainEventDispatcher>();
+            serviceCollection.AddSingleton<IEventHandler<TransactionUpdatedEvent>, TransactionUpdatedEventHandler>();
+
             //ETContext
             var context = ETConnection.InitializeExpanseTrackerContext();
             serviceCollection.AddSingleton(context);
@@ -56,10 +61,6 @@ namespace Tester
             serviceCollection.AddSingleton<TransactionCommandHandler>();
             serviceCollection.AddSingleton<BudgetCommandHandler>();
             serviceCollection.AddSingleton<QueryHandler>();
-
-
-            // event publishers
-            //serviceCollection.AddSingleton<IDomainEventPublisher>();
 
             //UoW + repos
             serviceCollection.AddSingleton<IExpanseTrackerUnitOfWork, ExpanseTrackerUnitOfWork>();

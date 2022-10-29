@@ -32,15 +32,11 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public BudgetStatus CurrentStatus { get; protected set; }
         public Guid AccountId { get; protected set; }
         
-        private List<Category> _categories;
-        public IEnumerable<Category> Categories
-        {
-            get { return _categories.AsReadOnly(); }
-        }
+        public Category BudgetCategory { get; protected set; }
 
         protected Budget() { }
 
-        public Budget(Guid id, string name, Money limit, BudgetType type, IEnumerable<Category> categories, Guid accountId) : base(id) //obsługa gdy limit jest zerowy
+        public Budget(Guid id, string name, Money limit, BudgetType type, Category category, Guid accountId) : base(id) //obsługa gdy limit jest zerowy
         {
             this.Name = name;
             this.Id = id;
@@ -52,7 +48,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.EndTime = this.StartTime.AddMonths(1).AddDays(-1);
             this.CurrentStatus = BudgetStatus.Active;
             this.AccountId = accountId;
-            this._categories = (List<Category>)categories; 
+            this.BudgetCategory = category; 
         }
 
         public void DeactivateBudget()
@@ -63,7 +59,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public void UpdateCurrentValue(Money value)
         {
             this.CurrentValue += value;
-            this.LimitUtilization = this.CurrentValue.Amount / this.Limit.Amount;
+            this.LimitUtilization = Math.Round(this.CurrentValue.Amount / this.Limit.Amount,2);
         }
 
         public void UpdateLimit(Money limit)
@@ -72,12 +68,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.LimitUtilization = this.CurrentValue.Amount / this.Limit.Amount;
         }
 
-        public void ChangeCategories(List<Category> newCategories)
+        public void ChangeCategories(Category newCategory)
         {
-            _categories = newCategories;
+            BudgetCategory = newCategory;
         }
-
-
 
     }
 }

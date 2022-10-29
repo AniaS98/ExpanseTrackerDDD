@@ -22,16 +22,19 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
 
         public AccountDto Map(Account account)
         {
-            return new AccountDto()
+            AccountDto accountDto = new AccountDto()
             {
                 Currency = (CurrencyNameDto)account.CurrencyName,
                 AccountNumber = account.AccountNumber,
-                Color = account.Color,
                 Id = account.Id,
                 Name = account.Name,
                 Type = (AccountTypeDto)account.Type,
-                UserId = account.UserId
+                UserId = account.UserId,
             };
+            accountDto.Balance = Mappers.Map(account.Balance);
+            accountDto.Overdraft = Mappers.Map(account.Overdraft);
+
+            return accountDto;
         }
 
     }

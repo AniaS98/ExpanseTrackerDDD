@@ -24,7 +24,7 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             builder.HasOne<Account>().WithMany().IsRequired(false).HasForeignKey("AccountId");
 
             // Relacja 1:N pomiędzy Budget i Category
-            builder.HasMany(b => b.Categories);
+            builder.HasOne(b => b.BudgetCategory);
 
             //Relacja 1:1 pomiędzy Budget i Money
             builder.HasOne(b => b.CurrentValue);

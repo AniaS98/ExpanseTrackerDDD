@@ -25,19 +25,20 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Queries.Handlers
         #region AccountQueries
         public List<AccountDto> Execute(GetAllAccountsQuery query)
         {
-            var accounts = _context.Accounts.AsNoTracking().ToList();
+            //var accounts = _context.Accounts.AsNoTracking().ToList();
+            var accounts = _context.Accounts.ToList();
             return this._accountMapper.Map(accounts);
         }
 
         public List<AccountDto> Execute(GetAllAccountsOfUserQuery query)
         {
-            var accounts = _context.Accounts.AsNoTracking().Where(a => a.UserId == query.UserId).ToList();
+            var accounts = _context.Accounts.Where(a => a.UserId == query.UserId).ToList();
             return this._accountMapper.Map(accounts);
         }
 
         public AccountDto Execute(GetAccountQuery query)
         {
-            var account = _context.Accounts.AsNoTracking().Where(a => a.Id == query.AccountId).FirstOrDefault();
+            var account = _context.Accounts.Where(a => a.Id == query.AccountId).FirstOrDefault();
             return this._accountMapper.Map(account);
         }
         #endregion

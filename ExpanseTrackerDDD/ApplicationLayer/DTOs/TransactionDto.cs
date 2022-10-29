@@ -42,6 +42,15 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public string Contractor { get; set; }
         public Guid AccountId { get; set; }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Transaction: " + Id + "\n");
+            sb.Append("Value: " + Value.ToString() + "\n");
+            sb.Append("Date: " + TransactionDate.ToString("dd/MM/yyyy") + "\n");
+            sb.Append("Description: " + Description + "\n");
 
+            return sb.ToString();
+        }
     }
 }

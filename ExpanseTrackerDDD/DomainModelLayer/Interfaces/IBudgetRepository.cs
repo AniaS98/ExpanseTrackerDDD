@@ -11,5 +11,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Interfaces
     {
         List<Budget> GetAllByAccountId(Guid accountId);
         Budget GetActiveByAccountId(Guid accountId);
+        Budget GetActiveByAccountIdAndCategory(Guid accountId, Category category);
     }
 }

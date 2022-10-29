@@ -86,5 +86,16 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             yield return Name.ToString().ToUpper();
             yield return SubcategoryName.ToString().ToUpper();
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name.ToString());
+            if (SubcategoryName.ToString() != "")
+                sb.Append(" " + SubcategoryName);
+            sb.Append("\n");            
+
+            return sb.ToString();
+        }
     }
 }

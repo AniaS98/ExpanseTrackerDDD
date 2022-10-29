@@ -14,8 +14,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.BudgetCommands
         public BudgetType Type { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public List<CategoryName> CategoryNames { get;  set; }
-        public List<SubcategoryName> SubcategoryNames { get;  set; }
+        public CategoryName CategoryName { get;  set; }
+        public SubcategoryName SubcategoryName { get;  set; }
         public Guid AccountId { get; set; }
     }
 }

@@ -69,5 +69,15 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public CategoryNameDto Name { get; set; }
         public SubcategoryNameDto SubcategoryName { get; set; }
         //private string IconPath;
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name.ToString());
+            if (SubcategoryName.ToString() != "")
+                sb.Append(" " + SubcategoryName);
+            sb.Append("\n");
+
+            return sb.ToString();
+        }
     }
 }

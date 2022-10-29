@@ -95,5 +95,14 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         {
             throw new NotImplementedException();
         }
+
+        /*public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+
+
+            return base.ToString();
+        }*/
     }
 }

@@ -2,6 +2,7 @@
 using ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,18 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Budget> Budgets { get; set; }
-        //public DbSet<Category> Categories { get; set; }
-        //public DbSet<Money> Monies { get; set; }
-        //public DbSet<Recurrency> Recurrencies { get; set; }
-
+        //Chyba to tutaj
 
         public ETContext(DbContextOptions<ETContext> options) : base(options) 
         {
+            string basePath = @"D:\Ania\Documents\STUDIA\_Magisterka\_Praca Magisterska\ExpanseTrackerDDD\ExpanseTrackerTester\bin\Debug\netcoreapp3.1";
+            if (File.Exists(Path.Combine(basePath,"ExpanseTrackerDDD_Base.db")))
+            {
+                File.Delete(Path.Combine(basePath, "ExpanseTrackerDDD_Base.db"));
+                File.Delete(Path.Combine(basePath, "ExpanseTrackerDDD_Base.db-shm"));
+                File.Delete(Path.Combine(basePath, "ExpanseTrackerDDD_Base.db-wal"));
+            }
+
             Database.EnsureDeleted();
             Database.EnsureCreated();
         }
@@ -39,7 +45,5 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new MoneyConfiguration());
         }
-
-
     }
 }

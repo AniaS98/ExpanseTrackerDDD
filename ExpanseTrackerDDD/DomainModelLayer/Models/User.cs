@@ -32,6 +32,16 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Password = newPassword;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("User: " + Id + "\n");
+            sb.Append("Login: " + Login + "\n");
+            sb.Append("Name: " + FirstName + " " + LastName + "\n");
+
+            return sb.ToString();
+        }
+
 
     }
 }

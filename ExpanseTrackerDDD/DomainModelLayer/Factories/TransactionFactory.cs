@@ -1,4 +1,5 @@
 ﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
+using ExpanseTrackerDDD.DomainModelLayer.Helpers;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -17,63 +18,16 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
         //Muszę jeszcze dodać opcje nasłuchiwania transakcji przez budżet żeby zmieniła się wartość obecnego wykorzystania limitu
         public Transaction CreateTransaction(Guid id, string description, TransactionType type, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note = "")
         {
-            Recurrency recurrency = new Recurrency();
-            //int NumberOfRecurrencies
-            //RecurrencyPeriod
-            // EndDate
-
-            if (recurrencyType != RecurrencyType.None)
-            {
-                if (period == RecurrencyPeriod.None)
-                    throw new Exception("Please specify until when should the transaction occur");
-                if (period == RecurrencyPeriod.Number && recurrencyType == RecurrencyType.Every_x_day && String.IsNullOrEmpty(daysApart.ToString()))
-                    throw new Exception("Please specify how many times should the transaction occur");
-                if (period == RecurrencyPeriod.Date && String.IsNullOrEmpty(recurrencyEndDate.ToString()))
-                    throw new Exception("Please specify until when should the transaction occur");
-            }
-
-            switch ((int)recurrencyType)
-            {
-                case 0:
-                    {
-                        break;
-                    }
-                case 1:
-                    {
-                        recurrency = new Recurrency(recurrencyType, 1, numberOfRecurrencies, recurrencyEndDate);
-                        break;
-                    }
-                case 2:
-                    {
-                        recurrency = new Recurrency(recurrencyType, 7, numberOfRecurrencies, recurrencyEndDate);
-                        break;
-                    }
-                case 3:
-                    {
-                        recurrency = new Recurrency(recurrencyType, dayOfTheMonth, numberOfRecurrencies, recurrencyEndDate, 0);
-                        break;
-                    }
-                case 4:
-                    {
-                        recurrency = new Recurrency(recurrencyType, dayOfTheMonth, numberOfRecurrencies, recurrencyEndDate, 0);
-
-                        break;
-                    }
-                case 5:
-                    {
-                        recurrency = new Recurrency(recurrencyType, daysApart, numberOfRecurrencies, recurrencyEndDate);
-                        break;
-                    }
-            }
+            Recurrency recurrency = RecurrencyHelper.SetRecurrency(recurrencyType, numberOfRecurrencies, recurrencyEndDate, period, dayOfTheMonth, daysApart);
 
             Category category = new Category(categoryName, categorySubcategoryName);
 
-            return new Transaction(id, description, type, value, category, recurrency, transactionDate, status, accountId, contractor, note);
+            return new Transaction(id, type, value, category, recurrency, transactionDate, status, accountId, description, contractor, note);
         }
 
         public Transaction CreateTransfer(Transaction from, Guid destinationAccountId)
         {
-            return new Transaction(new Guid(),from.Description, from.Type, from.Value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
+            return new Transaction(new Guid(), from.Type, from.Value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId, from.Description);
         }
 
         public Transaction Exchange(Transaction from, Guid destinationAccountId, CurrencyName newCurrency)
@@ -82,8 +36,19 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 
             var task = Task.Run(async () => await value.UpdateCurrentValue(value.Currency, newCurrency));
 
-            return new Transaction(new Guid(),  from.Description, from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId);
+            return new Transaction(new Guid(), from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId, from.Description);
 
+        }
+
+        public Transaction UpdateTransaction(Transaction transaction, string description, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor, string note)
+        {
+            Recurrency recurrency = RecurrencyHelper.SetRecurrency(recurrencyType, numberOfRecurrencies, recurrencyEndDate, period, dayOfTheMonth, daysApart);
+
+            Category category = new Category(categoryName, categorySubcategoryName);
+
+            transaction.UpdateTransaction(description, value, category, transactionDate, recurrency, status, accountId, contractor, note);
+
+            return transaction;
         }
 
 

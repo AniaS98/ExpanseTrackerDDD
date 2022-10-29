@@ -13,5 +13,14 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("User: " + Id + "\n");
+            sb.Append("Login: " + Login + "\n");
+            sb.Append("Name: " + FirstName + " " + LastName + "\n");
+
+            return sb.ToString();
+        }
     }
 }

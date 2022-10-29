@@ -37,52 +37,160 @@ namespace Tester
 
         public void Run()
         {
-            //Tworzenie użytkownika
+            //Tworzenie pierwszego użytkownika
             //hasło
-            string password = "asd"; // new SecureString();
-            string pas = "admin123";
+            string password = "Pas@123"; // new SecureString();
+            string repeatPassword = "Pas@123!";
             //foreach (char c in pas)
             //  password.AppendChar(c);
             //ID
-            Guid userId = Guid.NewGuid();
+            Guid userId1 = Guid.NewGuid();
 
             _userCommandHandler.Execute(new CreateUserCommand()
             {
-                Id = userId,
+                Id = userId1,
                 FirstName = "Krzysztof",
                 LastName = "Pazór",
                 Login = "kPaz",
                 Password = password,
                 RepeatPassword = password
             });
-            Console.WriteLine("Account created");
+            Console.WriteLine("User created\n");
 
+            //Wyświetlenie wszystkich użytkowników
             var users = _queryHandler.Execute(new GetAllUsersQuery());
-            Console.WriteLine(users);
-            //Tworzenie 2 kont
-            Guid a1 = Guid.NewGuid();
+            foreach(var i in users)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+            //Tworzenie drugiego użytkownika z niezgodnymi hasłami
+            //hasło
+            password = "Azor*789"; // new SecureString();
+            Guid userId2 = Guid.NewGuid();
+            try
+            {
+                _userCommandHandler.Execute(new CreateUserCommand()
+                {
+                    Id = userId2,
+                    FirstName = "Julia",
+                    LastName = "Kowalska",
+                    Login = "jKow",
+                    Password = password,
+                    RepeatPassword = repeatPassword
+                });
+                Console.WriteLine("Account created\n");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(String.Format("User could not be created, because of the exception:\n{0}\n", e.Message));
+            }
+
+            //Wyświetlenie wszystkich użytkowników
+            users = _queryHandler.Execute(new GetAllUsersQuery());
+            foreach (var i in users)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+            //Tworzenie drugiego użytkownika, druga próba
+            //hasło
+            password = "Azor*789"; // new SecureString();
+            _userCommandHandler.Execute(new CreateUserCommand()
+            {
+                Id = userId2,
+                FirstName = "Julia",
+                LastName = "Kowalska",
+                Login = "jKow",
+                Password = password,
+                RepeatPassword = password
+            });
+            Console.WriteLine("User created\n");
+
+            //Wyświetlenie wszystkich użytkowników
+            users = _queryHandler.Execute(new GetAllUsersQuery());
+            foreach (var i in users)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+
+            //Usunięcie pierwszego użytkownika
+            _userCommandHandler.Execute(new DeleteUserCommand()
+            { Id = userId1 });
+            Console.WriteLine(string.Format("User with id: {0} has been deleted\n", userId1));
+
+            //Wyświetlenie wszystkich użytkowników
+            users = _queryHandler.Execute(new GetAllUsersQuery());
+            foreach (var i in users)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+
+            //Utworzenie pierwszego konta z PLN
+            Guid accountId1 = Guid.NewGuid();
+
             _accountCommandHandler.Execute(new CreateAccountCommand()
             {
-                Id = a1,
+                Id = accountId1,
                 AccountNumber = "123",
-                Color = "green",
                 CurrencyName = CurrencyName.PLN,
                 Name = "PKO",
                 Type = AccountType.BankAccount,
-                UserId = userId
+                UserId = userId2,
+                BalanceValue = 0.00m
             });
+            Console.WriteLine("Account created");
 
-            Guid a2 = Guid.NewGuid();
+            //Wyświetlanie wszystkich kont drugiego użytkownika
+            var accounts = _queryHandler.Execute(new GetAllAccountsOfUserQuery() { UserId = userId2 });
+            foreach (var i in accounts)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+            //Utworzenie drugiego konta z PLN
+            Guid accountId2 = Guid.NewGuid();
+
             _accountCommandHandler.Execute(new CreateAccountCommand()
             {
-                Id = a2,
+                Id = accountId2,
                 AccountNumber = "456",
-                Color = "yellow",
-                CurrencyName = CurrencyName.GBP,
+                CurrencyName = CurrencyName.PLN,
+                Name = "mBank",
+                Type = AccountType.BankAccountWithOverdraft,
+                BalanceValue = 0.00m,
+                OverdraftValue = 500m,
+                UserId = userId2
+            });
+            Console.WriteLine("Account created");
+
+            //Wyświetlanie wszystkich kont drugiego użytkownika
+            accounts = _queryHandler.Execute(new GetAllAccountsOfUserQuery() { UserId = userId2 });
+            foreach (var i in accounts)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+
+            //Utworzenie konta z EUR
+            Guid accountId3 = Guid.NewGuid();
+
+            _accountCommandHandler.Execute(new CreateAccountCommand()
+            {
+                Id = accountId3,
+                AccountNumber = "456",
+                CurrencyName = CurrencyName.EUR,
                 Name = "HSBC",
                 Type = AccountType.BankAccount,
-                UserId = userId
+                BalanceValue = 0.00m,
+                UserId = userId2
             });
+            Console.WriteLine("Account created");
+
+            //Wyświetlanie wszystkich kont drugiego użytkownika
+            accounts = _queryHandler.Execute(new GetAllAccountsOfUserQuery() { UserId = userId2 });
+            foreach (var i in accounts)
+                Console.WriteLine(i.ToString());
+            Console.WriteLine("\n");
+
+
+
 
             //Przykładowe transakcje
             Guid t1 = Guid.NewGuid();
@@ -99,7 +207,7 @@ namespace Tester
                 TransactionDate = new DateTime(2022,9,1),
                 Status = TransactionStatus.Settled,
                 Note = "bardzo dobre ciastko",
-                AccountId = a1
+                AccountId = accountId1
             });
 
             Guid t2 = Guid.NewGuid();
@@ -116,10 +224,13 @@ namespace Tester
                 TransactionDate = new DateTime(2022, 9, 1),
                 Status = TransactionStatus.Settled,
                 Note = "bardzo dobre ciastko",
-                AccountId = a1
+                AccountId = accountId1
             });
+            accounts = _queryHandler.Execute(new GetAllAccountsQuery());
 
 
+
+            Console.WriteLine("test");
 
 
 

@@ -1,17 +1,17 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands
 {
-    public class CreateTransactionCommand
+    public class CreateTransferWithExchangeCommand
     {
+        public Guid FromTransactionId { get; set; }
+        public Guid ToTransactionId { get; set; }
         public Guid Id { get; set; }
         public string Description { get; set; }
-        public TransactionType TransactionType { get; set; }
         public decimal Amount { get; set; }
         public CurrencyName Currency { get; set; }
         public CategoryName CatName { get; set; }
@@ -22,9 +22,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands
         public TransactionFrequency Frequency { get; set; }
         [AllowNull]
         public string Note { get; set; }
-        [AllowNull]
-        public string Contractor { get; set; }
-        public Guid AccountId { get; set; }
+        public Guid FromAccountId { get; set; }
+        public Guid ToAccountId { get; set; }
         //Recurrency
         [AllowNull]
         public RecurrencyType RecurType { get; set; }

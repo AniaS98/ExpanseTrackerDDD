@@ -21,11 +21,10 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             builder.Property<Guid>("UserId").IsRequired();
 
             builder.HasOne(a => a.Balance);
+            builder.HasOne(a => a.Overdraft);
 
             // Relacja 1:N pomiędzy User i Account
             builder.HasOne<User>().WithMany().IsRequired(true).HasForeignKey("UserId");
-
-            
 
         }
     }

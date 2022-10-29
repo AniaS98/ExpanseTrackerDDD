@@ -32,15 +32,10 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
                 Name = budget.Name,
                 StartTime = budget.StartTime,
                 Type = (BudgetTypeDto)budget.Type,
-                Categories = new List<CategoryDto>(),
-                AccountId = budget.AccountId
+                BudgetCategoryDto = Mappers.Map(budget.BudgetCategory),
+                AccountId = budget.AccountId,
+                CurrentStatus = (BudgetStatusDto)budget.CurrentStatus
             };
-
-            foreach(Category category in budget.Categories)
-            {
-                CategoryDto categoryDto = Mappers.Map(category);
-                result.Categories.Add(categoryDto);
-            }
 
             return result;
         }

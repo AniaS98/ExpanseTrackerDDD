@@ -22,38 +22,24 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
     public class Account : AggregateRoot
     {
         public Money Balance { get; protected set; }
+        public Money Overdraft { get; protected set; }
         public string Name { get; protected set; }
         public string AccountNumber { get; protected set; }
         public AccountType Type { get; protected set; }
         public CurrencyName CurrencyName { get; protected set; }
-        public string Color { get; protected set; }
         public Guid UserId { get; protected set; } 
 
         protected Account(){}
 
-        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m) : base(id)
+        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m, Money overdraft=null) : base(id)
         {
             this.Id = id;
             this.Balance = new Money(balance, currencyName);
+            this.Overdraft = overdraft;
             this.Name = name;
             this.AccountNumber = accountNumber;
             this.Type = type;
             this.CurrencyName = currencyName;
-            this.Color = "";
-            //this.User = user;
-            this.UserId = userId;
-        }
-
-        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, string color, decimal balance = 0.0m) : base(id)
-        {
-            this.Id = id;
-            this.Balance = new Money(balance, currencyName);
-            this.Name = name;
-            this.AccountNumber = accountNumber;
-            this.Type = type;
-            this.CurrencyName = currencyName;
-            this.Color = color;
-            //this.User = user;
             this.UserId = userId;
         }
 
@@ -67,16 +53,19 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.AccountNumber = accountNumber;
         }
 
-        public void UpdateColor(string color)
-        {
-            this.Color = color;
-        }
         public void UpdateType(AccountType type)
         {
             this.Type = type;
         }
 
+        public void UpdateOriginalBalance(Money value)
+        {
+            this.Balance = value;
+        }
 
-
+        public void UpdateBalance(Money value)
+        {
+            this.Balance = value;
+        }
     }
 }

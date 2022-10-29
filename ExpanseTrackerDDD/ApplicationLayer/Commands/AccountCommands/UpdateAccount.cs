@@ -11,6 +11,5 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.AccountCommands
         public string Name { get; set; }
         public string AccountNumber { get; set; }
         public AccountType Type { get; set; }
-        public string Color { get; set; }
     }
 }

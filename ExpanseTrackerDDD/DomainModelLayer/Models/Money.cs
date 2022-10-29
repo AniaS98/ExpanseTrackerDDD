@@ -19,12 +19,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         GBP
     }
 
-    public enum Exchange
-    {
-        BUY,
-        SELL
-    }
-
     public class Money : ValueObject
     {
         public decimal Amount { get; protected set; }
@@ -32,11 +26,17 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
 
         private string Url = "https://cc-api.oanda.com/cc-api/v1/currencies?base={FROM}&quote={TO}&data_type=chart&start_date={STARTDATE}&end_date={ENDDATE}";
 
+        public Money(CurrencyName currency)
+        {
+            this.Amount = 0.00m;
+            this.Currency = currency;
+        }
         public Money(decimal amount, CurrencyName currency)
         {
             this.Amount = amount;
             this.Currency = currency;
         }
+
 
         public async Task UpdateCurrentValue(CurrencyName from, CurrencyName to)
         {
@@ -85,6 +85,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         {
             throw new NotImplementedException();
         }
+
         public static Money operator +(Money a, Money b)
         {
             if (a.Currency == b.Currency)
@@ -92,6 +93,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             else
                 throw new Exception("Currencies do not match");
         }
+
         public static Money operator -(Money a, Money b)
         {
             if (a.Currency == b.Currency)
@@ -99,6 +101,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             else
                 throw new Exception("Currencies do not match");
         }
+
         public static Money operator /(Money a, Money b)
         {
             if (a.Currency == b.Currency)
@@ -106,6 +109,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             else
                 throw new Exception("Currencies do not match");
         }
+
         public static Money operator *(Money a, Money b)
         {
             if (a.Currency == b.Currency)
@@ -113,11 +117,41 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             else
                 throw new Exception("Currencies do not match");
         }
+
+        public static Money operator -(Money a)
+        {
+            return new Money(-a.Amount, a.Currency);
+        }
+
         public override string ToString()
         {
-            return string.Format("{0}.2f {1}", Amount, Currency);
+            return string.Format("{0} {1}", Math.Round(Amount,2), Currency);
+        }
+
+        public int Compare(Money m)
+        {
+            return this.Amount.CompareTo(m.Amount);
+        }
+
+        public static bool operator <(Money m1, Money m2)
+        {
+            return m1.Amount.CompareTo(m2.Amount) < 0;
+        }
+
+        public static bool operator >(Money m1, Money m2)
+        {
+            return m1.Amount.CompareTo(m2.Amount) > 0;
+        }
+
+        public static bool operator >=(Money m1, Money m2)
+        {
+            return m1.Amount.CompareTo(m2.Amount) >= 0;
+        }
+
+        public static bool operator <=(Money m1, Money m2)
+        {
+            return m1.Amount.CompareTo(m2.Amount) <= 0;
         }
 
     }
-
 }
