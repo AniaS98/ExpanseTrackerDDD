@@ -5,6 +5,12 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
 {
+    public enum UserStatusDto
+    {
+        LoggedOut,
+        LoggedIn
+    }
+
     public class UserDto
     {
         public Guid Id { get; set; }
@@ -12,6 +18,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public UserStatusDto status { get; set; }
 
         public override string ToString()
         {

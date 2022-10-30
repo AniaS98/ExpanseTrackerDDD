@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExpanseTrackerDDD.DomainModelLayer.Events
+namespace ExpanseTrackerDDD.DomainModelLayer.Events.Implementations
 {
     public class SimpleEventDispatcher : IDomainEventDispatcher
     {

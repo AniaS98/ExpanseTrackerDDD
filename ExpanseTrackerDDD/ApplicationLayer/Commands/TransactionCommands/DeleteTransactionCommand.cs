@@ -7,8 +7,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands
 {
     public class DeleteTransactionCommand
     {
-        public Guid FirstTransactionId;
+        public Guid FirstTransactionId { get; set; }
         [AllowNull]
-        public Guid SecondTransactionId;
+        public Guid SecondTransactionId { get; set; }
     }
 }

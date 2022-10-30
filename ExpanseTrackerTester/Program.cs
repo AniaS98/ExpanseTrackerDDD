@@ -15,6 +15,7 @@ using ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers;
 using ExpanseTrackerDDD.InfrastructureLayer.EF;
 using Microsoft.Extensions.DependencyInjection;
 using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
+using ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands;
 
 namespace Tester
 {
@@ -39,6 +40,7 @@ namespace Tester
 
             //Przy każdym włączeniu aplikacji wykona się komenda odnawiająca budżet dla każdego zarejestrowanego użytkownika
             RenewAllBudgets(serviceCollection);
+            SettleTransactions(serviceCollection);
 
             //Testy
             var testCases = new TestCases(serviceCollection);
@@ -94,6 +96,20 @@ namespace Tester
             foreach(var u in users)
             {
                 bch.Execute(new RenewBudgetCommand() { userId = u.Id });
+            }
+        }
+
+        private static void SettleTransactions(IServiceCollection serviceCollection)
+        {
+            //Przy każdym włączeniu aplikacji wykona się komenda rozliczająca transakcje, których termin już minął
+            IServiceProvider provider = serviceCollection.BuildServiceProvider();
+            QueryHandler qh = provider.GetRequiredService<QueryHandler>();
+            TransactionCommandHandler tch = provider.GetRequiredService<TransactionCommandHandler>();
+
+            List<TransactionDto> transactions = qh.Execute(new GetAllUnsettledTransactionsQuery());
+            foreach (var t in transactions)
+            {
+                tch.Execute(new SettleAllRequiredTransactions() { Id = t.Id });
             }
         }
     }

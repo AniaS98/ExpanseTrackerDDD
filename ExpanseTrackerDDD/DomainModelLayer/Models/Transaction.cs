@@ -79,6 +79,11 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Note = note;
         }
 
+        public void UpdateStatus(TransactionStatus status)
+        {
+            this.Status = status;
+        }
+
         //chyba trzeba też dać usunięcie 
 
         public override string ToString()

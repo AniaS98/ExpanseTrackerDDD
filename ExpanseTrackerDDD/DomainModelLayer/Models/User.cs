@@ -9,12 +9,19 @@ using ExpanseTrackerDDD.DomainModelLayer.Events;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {
+    public enum UserStatus
+    {
+        LoggedOut,
+        LoggedIn
+    }
+
     public class User : AggregateRoot
     {
         public string Login { get; protected set; }
         public string Password { get; protected set; } 
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
+        public UserStatus status { get; protected set; }
 
         public User() { }
 
@@ -25,6 +32,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Password = password;
             this.FirstName = firstName;
             this.LastName = lastName;
+            this.status = UserStatus.LoggedIn;
         }
 
         public void UpdatePassword(string newPassword)

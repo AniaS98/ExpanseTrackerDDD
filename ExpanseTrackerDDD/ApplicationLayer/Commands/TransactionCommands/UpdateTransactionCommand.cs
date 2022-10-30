@@ -8,7 +8,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands
 {
     public class UpdateTransactionCommand
     {
-        public Guid Id;
+        public Guid Id { get; set; }
         public string Description { get; set; }
         public TransactionType TransactionType { get; set; }
         public decimal Amount { get; set; }

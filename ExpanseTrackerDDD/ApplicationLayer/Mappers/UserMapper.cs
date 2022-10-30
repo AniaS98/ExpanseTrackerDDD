@@ -28,7 +28,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Mappers
                 Id = user.Id,
                 LastName = user.LastName,
                 Login = user.Login,
-                Password = user.Password
+                Password = user.Password,
+                status = (UserStatusDto)user.status
             };
         }
 

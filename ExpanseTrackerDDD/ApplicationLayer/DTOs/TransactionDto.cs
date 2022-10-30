@@ -6,8 +6,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DTOs
 {
     public enum TransactionStatusDto
     {
+        Settled,
         Upcomming,
-        Planned,
         Owed
     }
 

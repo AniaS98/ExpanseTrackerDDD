@@ -11,11 +11,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
     public class TransactionFactory
     {
         
-
         public TransactionFactory()
         {
         }
-        //Muszę jeszcze dodać opcje nasłuchiwania transakcji przez budżet żeby zmieniła się wartość obecnego wykorzystania limitu
+
         public Transaction CreateTransaction(Guid id, string description, TransactionType type, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note = "")
         {
             Recurrency recurrency = RecurrencyHelper.SetRecurrency(recurrencyType, numberOfRecurrencies, recurrencyEndDate, period, dayOfTheMonth, daysApart);
@@ -37,7 +36,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
             var task = Task.Run(async () => await value.UpdateCurrentValue(value.Currency, newCurrency));
 
             return new Transaction(new Guid(), from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId, from.Description);
-
         }
 
         public Transaction UpdateTransaction(Transaction transaction, string description, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor, string note)
@@ -50,8 +48,5 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 
             return transaction;
         }
-
-
-
     }
 }
