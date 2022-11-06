@@ -40,6 +40,15 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
 
         public Recurrency() { }
 
+        public Recurrency(DateTime endDate) 
+        { 
+            this.EndDate = endDate;
+            this.Type = RecurrencyType.None;
+            this.DaysApart = 0;
+            this.NumberOfRecurrencies = 0;
+            this.EndDate = endDate;
+        }
+
         public Recurrency(RecurrencyType type, int daysApart, int numberOfRecurrencies, DateTime endDate) 
         {
             this.Type = type;

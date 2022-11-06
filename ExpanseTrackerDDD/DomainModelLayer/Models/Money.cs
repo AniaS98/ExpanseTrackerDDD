@@ -24,7 +24,7 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public decimal Amount { get; protected set; }
         public CurrencyName Currency { get; protected set; }
 
-        private string Url = "https://cc-api.oanda.com/cc-api/v1/currencies?base={FROM}&quote={TO}&data_type=chart&start_date={STARTDATE}&end_date={ENDDATE}";
+        private string Url = "http://api.nbp.pl/api/exchangerates/rates/{table}/{code}/";
 
         public Money(CurrencyName currency)
         {
@@ -37,33 +37,6 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Currency = currency;
         }
 
-
-        public async Task UpdateCurrentValue(CurrencyName from, CurrencyName to)
-        {
-            DateTime updateDateTime = DateTime.Now;
-            // request po api zbierający obecną wartość
-            Url = Url.Replace("{STARTDATE}", updateDateTime.AddDays(-1).ToString("yyyy-MM-dd"));
-            Url = Url.Replace("{ENDDATE}", updateDateTime.ToString("yyyy-MM-dd"));
-            Url = Url.Replace("{FROM}", from.ToString());
-            Url = Url.Replace("{TO}", to.ToString());
-            HttpClient httpClient = new HttpClient();
-            string result = "";
-            try
-            {
-                result = await httpClient.GetStringAsync(Url);
-            }
-            catch (Exception e)
-            {
-                if (e.Message.Contains("400"))
-                    Console.WriteLine("Currency not supported");
-            }
-            JObject json = JObject.Parse(result);
-            Amount *= Convert.ToDecimal(json.First.Value<JProperty>().Value.First["average_bid"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-            /*if (exchange == Exchange.BUY)
-                Amount *= Convert.ToDecimal(json.First.Value<JProperty>().Value.First["average_bid"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-            else
-                Amount *= Convert.ToDecimal(json.First.Value<JProperty>().Value.First["average_ask"].ToString(), System.Globalization.CultureInfo.InvariantCulture);*/
-        }
 
         /*
         public async void SetDefaultCurrency(CurrencyName name)

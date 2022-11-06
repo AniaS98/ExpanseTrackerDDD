@@ -26,7 +26,8 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Repositories
 
         public Budget GetActiveByAccountIdAndCategory(Guid accountId, Category category)
         {
-            return Context.Budgets.Where(b => b.AccountId == accountId && b.CurrentStatus == BudgetStatus.Active && b.BudgetCategory == category).FirstOrDefault();
+            return Context.Budgets.Where(b => b.AccountId == accountId && b.CurrentStatus == BudgetStatus.Active && 
+            b.BudgetCategory == category).FirstOrDefault();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
         /// Metoda służąca do logowania
         /// </summary>
         /// <param name="command"></param>
-        public void Execute(LoginCommand command)
+        public void Execute(LogInCommand command)
         {
             //Wyszukanie uźytkownika
             User user = _unitOfWork.UserRepository.GetUserByLogin(command.Login);
@@ -56,6 +56,30 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
 
             //Weryfikacja czy podane hasło zgadza się z tym przypisanym do uźytkownika
             UserHelper.PasswordVerification(user.Password, command.Password);
+
+            //Logowanie
+            user.LogIn();
+            this._unitOfWork.UserRepository.Update(user);
+
+            this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// Metoda służąca do logowania
+        /// </summary>
+        /// <param name="command"></param>
+        public void Execute(LogOutCommand command)
+        {
+            //Wyszukanie uźytkownika
+            User user = _unitOfWork.UserRepository.Get(command.Id);
+            if (user == null)
+                throw new Exception("The user does not exist");
+            
+            // Wylogowanie
+            user.LogOut();
+            this._unitOfWork.UserRepository.Update(user);
+
+            this._unitOfWork.Commit();
         }
 
         /// <summary>
@@ -68,6 +92,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             User user = _unitOfWork.UserRepository.Get(command.Id);
             if (user == null)
                 throw new Exception($"User with Id '{command.Id}' already exists!");
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to change the password");
 
             //Sprawdzenie czy oba hasła spełniają wymagania oraz czy się zgadzają
             UserHelper.PasswordValidation(command.Password, command.RepeatPassword);
@@ -93,13 +119,13 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             User user = _unitOfWork.UserRepository.Get(command.Id);
             if (user == null)
                 throw new Exception($"User with Id '{command.Id}' already exists!");
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to delete the User");
 
             //Usunięcie użytkownika
             this._unitOfWork.UserRepository.Delete(user);
 
             this._unitOfWork.Commit();
         }
-
-
     }
 }

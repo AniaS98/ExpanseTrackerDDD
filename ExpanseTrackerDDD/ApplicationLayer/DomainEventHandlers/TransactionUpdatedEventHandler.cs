@@ -31,16 +31,20 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers
                 var budget = this._budgetRepository.GetActiveByAccountIdAndCategory(eventData.Transaction.AccountId, eventData.Transaction.TransactionCategory);
 
                 //Aktualizacja budżetu jeżeli istniał
-                if (budget != null)
+                if (budget != null && eventData.Transaction.Status == TransactionStatus.Settled)
                 {
                     budget.UpdateCurrentValue(moneyDifference);
                     this._budgetRepository.Update(budget);
                 }
             }
 
-            //Weryfikacja i dokonanie zmian na koncie
-            AccountHelper.UpdateAccountAfterUpdateBalance(eventData.Account, eventData.Transaction, moneyDifference);
-            this._accountRepository.Update(eventData.Account);
+            //Weryfikacja i dokonanie zmian na koncie, jeżeli transakcja jest rozliczona
+            if (eventData.Transaction.Status == TransactionStatus.Settled)
+            {
+                AccountHelper.UpdateAccountAfterUpdateBalance(eventData.Account, eventData.Transaction, moneyDifference);
+                this._accountRepository.Update(eventData.Account);
+            }
+
         }
 
     }

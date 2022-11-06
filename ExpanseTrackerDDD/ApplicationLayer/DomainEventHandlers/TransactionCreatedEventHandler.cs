@@ -29,8 +29,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers
                 // Pobranie zmiennej Budzet
                 var budget = this._budgetRepository.GetActiveByAccountIdAndCategory(eventData.Transaction.AccountId, eventData.Transaction.TransactionCategory);
                 
-                // Aktualizacja budżetu jeżeli istniał
-                if (budget != null)
+                // Aktualizacja budżetu jeżeli istniał a transakcja jest rozliczona
+                if (budget != null && eventData.Transaction.Status == TransactionStatus.Settled)
                 {
                     budget.UpdateCurrentValue(eventData.Transaction.Value);
                     this._budgetRepository.Update(budget);
@@ -38,9 +38,13 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers
             }
 
             // Aktualizacja konta
-            //Weryfikacja i dokonanie zmian na koncie
-            AccountHelper.UpdateAccountBalance(eventData.Account, eventData.Transaction);
-            this._accountRepository.Update(eventData.Account);
+            //Weryfikacja i dokonanie zmian na koncie jeżeli transakcja jest została zakończona
+            if(eventData.Transaction.Status == TransactionStatus.Settled)
+            {
+                AccountHelper.UpdateAccountBalance(eventData.Account, eventData.Transaction);
+                this._accountRepository.Update(eventData.Account);
+            }
+            
         }
 
     }

@@ -29,7 +29,12 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             Account account = this._unitOfWork.AccountRepository.Get(command.AccountId);
             if (account == null)
                 throw new Exception($"Account with Id '{command.AccountId}' does not exist!");
-            
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(account.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to create a budget");
+
             //Sprawdzenie czy waluta budżetu zgadza się z walutą konta
             if (account.CurrencyName != command.LimitCurrency)
                 throw new Exception($"Attempt to use different currency than the currency of the account ('{account.CurrencyName}').");

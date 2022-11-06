@@ -40,6 +40,16 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
             this.Password = newPassword;
         }
 
+        public void LogIn()
+        {
+            this.status = UserStatus.LoggedIn;
+        }
+
+        public void LogOut()
+        {
+            this.status = UserStatus.LoggedOut;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

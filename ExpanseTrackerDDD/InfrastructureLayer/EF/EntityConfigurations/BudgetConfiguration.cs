@@ -15,15 +15,15 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
         {
             //Ustawienie klucza głównego
             builder.HasKey(a => a.Id);
+
             //Ustawienie klucza obcego
             builder.Property(a => a.Id).ValueGeneratedNever();
-            //builder.Ignore(a => a.DomainEventPublisher);
             builder.Property<Guid>("AccountId").IsRequired();
 
             // Relacja 1:N pomiędzy Account i Budget 
             builder.HasOne<Account>().WithMany().IsRequired(false).HasForeignKey("AccountId");
 
-            // Relacja 1:N pomiędzy Budget i Category
+            // Relacja 1:1 pomiędzy Budget i Category
             builder.HasOne(b => b.BudgetCategory);
 
             //Relacja 1:1 pomiędzy Budget i Money

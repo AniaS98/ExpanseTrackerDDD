@@ -9,13 +9,15 @@ using ExpanseTrackerDDD.DomainModelLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
 using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
+using ExpanseTrackerDDD.DomainModelLayer.Events.Implementations;
 
 namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 {
     public class ExpanseTrackerUnitOfWork : IExpanseTrackerUnitOfWork
     {
         private ETContext Context;
-        private IDomainEventDispatcher eventDispatcher;
+        private IDomainEventDispatcher EventDispatcher;
+        private IEventBus EventBus;
 
         public IUserRepository UserRepository { get; }
 
@@ -25,13 +27,15 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 
         public ITransactionRepository TransactionRepository { get; }
 
-        public ExpanseTrackerUnitOfWork(ETContext context)
+        public ExpanseTrackerUnitOfWork(ETContext context, IDomainEventDispatcher eventDispatcher, IEventBus eventBus)
         {
             this.Context = context;
             this.UserRepository = new UserRepository(context);
             this.AccountRepository = new AccountRepository(context);
             this.BudgetRepository = new BudgetRepository(context);
             this.TransactionRepository = new TransactionRepository(context);
+            this.EventDispatcher = eventDispatcher;
+            this.EventBus = eventBus;
         }
 
         public void Commit()
@@ -42,19 +46,24 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
                 .Where(x => x.DomainEvents.Any()).ToArray();
 
             //Iteraja po wszystkich entity, w których zaszły zmiany
-            foreach (var e in domainEventEntities)
+            foreach (var dee in domainEventEntities)
             {
                 //Pobieranie wszystkich zdarzeń danego entity
-                var events = e.DomainEvents.ToArray();
+                var events = dee.DomainEvents.ToArray();
                 //Czyszczenie listy zdarzeń
-                e.DomainEvents.Clear();
+                dee.DomainEvents.Clear();
                 //Obsługa zdarzeń
-                foreach (var de in events)
+                foreach (Event e in events)
                 {
-                    eventDispatcher.Dispatch(de);
+                    EventDispatcher.Dispatch(e);
+                    if(e is IIntegrationEvent)
+                        EventBus.Publish(e);
+        
                 }
-            }
 
+                
+
+            }
 
             Context.SaveChanges();
         }

@@ -27,7 +27,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             User user = this._unitOfWork.UserRepository.Get(command.UserId);
             if (user == null)
                 throw new Exception($"User with Id '{command.UserId}' does not exist!");
-            
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to create the account");
+
             //Sprawdzenie, czy konto może zostać utworzone
             Account account = this._unitOfWork.AccountRepository.Get(command.Id);
             if (account != null)
@@ -56,6 +58,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             Account account = this._unitOfWork.AccountRepository.Get(command.Id);
             if (account == null)
                 throw new Exception($"Account with Id '{command.Id}' does not exist!");
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(account.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to update the account");
             
             //Aktualizacja poszczególnych elementów
             if (command.Name != account.Name)
@@ -81,6 +88,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             Account account = this._unitOfWork.AccountRepository.Get(command.Id);
             if (account == null)
                 throw new Exception($"Account with Id '{command.Id}' does not exist!");
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(account.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to delete the account");
 
             //Usunięcie konta
             this._unitOfWork.AccountRepository.Delete(account);

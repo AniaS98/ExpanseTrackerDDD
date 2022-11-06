@@ -7,17 +7,13 @@ using System.Text;
 
 namespace ReportCreator.DomainModelLayer.Events.Handlers
 {
-    public class TransactionCreatedEventHandler : IObserver
+    public class TransactionCreatedEventHandler : IIntegrationEvent<TransactionCreatedEvent>
     {
         private IAccountRepository _accountRepository;
 
         public TransactionCreatedEventHandler(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
-        }
-
-        public void Update<T>(IEventListener<T> listener) where T : IDomainEvent
-        {
         }
 
         public void Handle(TransactionCreatedEvent eventData)

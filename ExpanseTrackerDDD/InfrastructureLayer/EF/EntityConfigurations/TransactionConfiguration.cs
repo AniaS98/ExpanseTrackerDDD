@@ -23,13 +23,14 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
             // Relacja 1:N pomiędzy Account i Transaction
             builder.HasOne<Account>().WithMany().IsRequired().HasForeignKey("AccountId");
 
-            //builder.Property<Recurrency>("TransactionRecurrency").IsRequired(false);
-            //builder.Property<Category>("TransactionCategory").IsRequired(false);
-
+            //Relacja 1:1 pomiędzy Transaction i Category
             builder.HasOne(t => t.TransactionCategory);
-            builder.HasOne(t => t.TransactionRecurrency);
-            builder.HasOne(t => t.Value);
 
+            //Relacja 1:1 pomiędzy Transaction i Recurrency
+            builder.HasOne(t => t.TransactionRecurrency);
+
+            //Relacja 1:1 pomiędzy Transaction i Money
+            builder.HasOne(t => t.Value);
         }
     }
 }

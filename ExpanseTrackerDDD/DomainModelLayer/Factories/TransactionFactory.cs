@@ -1,4 +1,5 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
+﻿using ExpanseTrackerDDD.ApplicationLayer.Services;
+using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Helpers;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;
@@ -10,15 +11,15 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
 {
     public class TransactionFactory
     {
+        private Services _services;
         
-        public TransactionFactory()
+        public TransactionFactory(Services services)
         {
+            _services = services;
         }
 
-        public Transaction CreateTransaction(Guid id, string description, TransactionType type, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note = "")
+        public Transaction CreateTransaction(Guid id, string description, TransactionType type, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, Recurrency recurrency, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor = "", string note = "")
         {
-            Recurrency recurrency = RecurrencyHelper.SetRecurrency(recurrencyType, numberOfRecurrencies, recurrencyEndDate, period, dayOfTheMonth, daysApart);
-
             Category category = new Category(categoryName, categorySubcategoryName);
 
             return new Transaction(id, type, value, category, recurrency, transactionDate, status, accountId, description, contractor, note);
@@ -33,14 +34,19 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Factories
         {
             Money value = from.Value;
 
-            var task = Task.Run(async () => await value.UpdateCurrentValue(value.Currency, newCurrency));
+            var task = Task.Run(async () => await _services.UpdateCurrentValue(value, newCurrency));
 
             return new Transaction(new Guid(), from.Type, value, from.TransactionCategory, from.TransactionRecurrency, from.TransactionDate, from.Status, destinationAccountId, from.Description);
         }
 
-        public Transaction UpdateTransaction(Transaction transaction, string description, Money value, CategoryName categoryName, SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, string contractor, string note)
+        public Transaction UpdateTransaction(Transaction transaction, string description, Money value, CategoryName categoryName, 
+            SubcategoryName categorySubcategoryName, RecurrencyType recurrencyType, int numberOfRecurrencies, DateTime recurrencyEndDate, 
+            RecurrencyPeriod period, int dayOfTheMonth, int daysApart, DateTime transactionDate, TransactionStatus status, Guid accountId, 
+            string contractor, string note)
         {
-            Recurrency recurrency = RecurrencyHelper.SetRecurrency(recurrencyType, numberOfRecurrencies, recurrencyEndDate, period, dayOfTheMonth, daysApart);
+            //to też poprawic
+            Recurrency recurrency = RecurrencyHelper.SetRecurrency(recurrencyType, numberOfRecurrencies, recurrencyEndDate, period, dayOfTheMonth, 
+                daysApart);
 
             Category category = new Category(categoryName, categorySubcategoryName);
 

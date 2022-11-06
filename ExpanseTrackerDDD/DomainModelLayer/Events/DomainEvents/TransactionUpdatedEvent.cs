@@ -1,4 +1,5 @@
 ﻿using ExpanseTrackerDDD.DomainModelLayer.Events.Implementations;
+using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Events
 {
-    public class TransactionUpdatedEvent : DomainEvent
+    public class TransactionUpdatedEvent : Event
     {
         public Transaction Transaction { get; private set; }
         public Account Account { get; private set; }

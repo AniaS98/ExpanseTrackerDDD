@@ -13,9 +13,6 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Money> builder)
         {
-            //Relacja 1:1 pomiędzy Budget i Money
-
-
             //Sztuczne pole Id jako klucz główny
             builder.Property<Guid>("Id").IsRequired();
             builder.HasKey("Id");

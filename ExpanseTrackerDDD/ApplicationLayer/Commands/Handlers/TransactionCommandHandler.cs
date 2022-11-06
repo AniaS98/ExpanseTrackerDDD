@@ -31,6 +31,13 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Zebranie obu kont
             Account fromAccount = this._unitOfWork.AccountRepository.Get(command.FromAccountId);
             Account toAccount = this._unitOfWork.AccountRepository.Get(command.ToAccountId);
+            if (fromAccount.UserId != toAccount.UserId)
+                throw new Exception("Unable to create transfer between those accounts!");
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(fromAccount.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to create the transfer");
 
             //Stworzenie obiektu Money
             Money value = new Money(command.Amount, command.Currency);
@@ -45,11 +52,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
                 throw new Exception($"Account with Id '{command.ToAccountId}' does not exist!");
             if (fromAccount.CurrencyName != command.Currency)
                 throw new Exception($"Attempt to use different currency than the currency of the account ('{fromAccount.CurrencyName}').");
-            
+
+            Recurrency recurrency = new Recurrency(command.TransactionDate);
             //Stworzenie transakcji
             Transaction fromTransaction = _transactionFactory.CreateTransaction(command.FromTransactionId, command.Description, TransactionType.Transfer, -value, command.CatName, 
-                command.CatSubcategoryName,command.RecurType, command.NumberOfRecurrencies, command.EndDate, command.Period, command.DayOfTheMonth, command.DaysApart, 
-                command.TransactionDate, command.Status, command.FromAccountId, "", command.Note);
+                command.CatSubcategoryName, recurrency, command.TransactionDate, command.Status, command.FromAccountId, "", command.Note);
             this._unitOfWork.TransactionRepository.Insert(fromTransaction);
 
             //Stworzenie zdarzenia informującego o stworzeniu transkacji
@@ -74,6 +81,13 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Zebranie obu kont
             Account fromAccount = this._unitOfWork.AccountRepository.Get(command.FromAccountId);
             Account toAccount = this._unitOfWork.AccountRepository.Get(command.ToAccountId);
+            if (fromAccount.UserId != toAccount.UserId)
+                throw new Exception("Unable to create transfer between those accounts!");
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(fromAccount.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to create the transfer");
 
             //Stworzenie obiektu Money
             Money value = new Money(command.Amount, command.Currency);
@@ -89,10 +103,10 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             if (fromAccount.CurrencyName != command.Currency)
                 throw new Exception($"Attempt to use different currency than the currency of the account ('{fromAccount.CurrencyName}').");
 
+            Recurrency recurrency = new Recurrency(command.TransactionDate);
             //Stworzenie transakcji
-            Transaction fromTransaction = _transactionFactory.CreateTransaction(command.FromTransactionId, command.Description, TransactionType.Exchange, -value, command.CatName, 
-                command.CatSubcategoryName, command.RecurType, command.NumberOfRecurrencies, command.EndDate, command.Period, command.DayOfTheMonth, command.DaysApart, 
-                command.TransactionDate, command.Status, command.FromAccountId, "", command.Note);
+            Transaction fromTransaction = _transactionFactory.CreateTransaction(command.FromTransactionId, command.Description, TransactionType.Transfer, -value, command.CatName,
+                command.CatSubcategoryName, recurrency, command.TransactionDate, command.Status, command.FromAccountId, "", command.Note);
             this._unitOfWork.TransactionRepository.Insert(fromTransaction);
 
             //Stworzenie zdarzenia informującego o stworzeniu transkacji
@@ -117,6 +131,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Pobranie konta
             Account account = this._unitOfWork.AccountRepository.Get(command.AccountId);
 
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(account.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to create the transaction");
+
             //Stworzenie obiektu Money
             Money value = new Money(command.Amount, command.Currency);
 
@@ -129,35 +148,23 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             if (account.CurrencyName != command.Currency)
                 throw new Exception($"Attempt to use different currency than the currency of the account ('{account.CurrencyName}').");
 
-            if(command.Frequency == TransactionFrequency.Reoccuring)
-            {
+            //Ustawienei Recurrency
+            Recurrency recurrency = RecurrencyHelper.SetRecurrency(command.RecurType, command.NumberOfRecurrencies, command.EndDate, command.Period, command.DayOfTheMonth, command.DaysApart);
 
+            DateTime date = command.TransactionDate;
+            for (int i=0; i< recurrency.NumberOfRecurrencies; i++)
+            {
+                //Stworzenie transakcji
+                Transaction transaction = _transactionFactory.CreateTransaction(command.Id, command.Description, TransactionType.Exchange, -value, command.CatName, command.CatSubcategoryName,
+                    recurrency, date, command.Status, command.AccountId, "", command.Note);
+                this._unitOfWork.TransactionRepository.Insert(transaction);
+
+                date.AddDays(recurrency.DaysApart);
+                //Stworzenie zdarzenia informującego o stworzeniu transkacji
+                if(i == 0)
+                    transaction.AddDomainEvent(new TransactionCreatedEvent(transaction, account));
             }
 
-
-
-
-            //Stworzenie transakcji
-            Transaction transaction = _transactionFactory.CreateTransaction(command.Id, command.Description, TransactionType.Exchange, -value, command.CatName, command.CatSubcategoryName, 
-                command.RecurType, command.NumberOfRecurrencies, command.EndDate, command.Period, command.DayOfTheMonth, command.DaysApart, command.TransactionDate, command.Status, 
-                command.AccountId, "", command.Note);
-            this._unitOfWork.TransactionRepository.Insert(transaction);
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //Stworzenie zdarzenia informującego o stworzeniu transkacji
-            transaction.AddDomainEvent(new TransactionCreatedEvent(transaction, account));
-            
             this._unitOfWork.Commit();
         }
 
@@ -170,6 +177,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Pobieranie konta i transakcji 
             Account account = this._unitOfWork.AccountRepository.Get(command.AccountId);
             Transaction transaction = this._unitOfWork.TransactionRepository.Get(command.Id);
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(account.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to update the transaction");
 
             //Sprawdzenie czy transakcja może zostać wykonana
             if (transaction == null)
@@ -209,6 +221,11 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             Account account = this._unitOfWork.AccountRepository.Get(transaction.AccountId);
             if (account == null)
                 throw new Exception($"Account with Id '{transaction.AccountId}' does not exist!");
+
+            //Sprawdzenie, czy użytkownik jest zalogowany
+            User user = this._unitOfWork.UserRepository.Get(account.UserId);
+            if (user.status != UserStatus.LoggedIn)
+                throw new Exception("Please log in to delete the transaction");
 
             //Stworzenie obiektu Money z atrybutem Amount rónwym 0
             Money value = new Money(account.CurrencyName);

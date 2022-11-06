@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Events.Implementations
 {
-    public class DomainEvent : IDomainEvent
+    public class IntegrationEvent : IIntegrationEvent
     {
     }
 }

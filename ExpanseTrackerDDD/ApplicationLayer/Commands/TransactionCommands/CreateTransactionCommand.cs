@@ -37,8 +37,6 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands
         [AllowNull]
         public int NumberOfRecurrencies { get; set; }
         [AllowNull]
-        public int CurrentNumberOfRecurrencies { get; set; }
-        [AllowNull]
         public DateTime EndDate { get; set; }
     }
 }

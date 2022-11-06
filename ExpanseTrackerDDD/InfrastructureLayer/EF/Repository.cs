@@ -30,7 +30,6 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
         }
         public IList<TEntity> Find(Expression<Func<TEntity, bool>> expression)
         {
-            Debug.WriteLine("tutaj przyszło");
             var a = Context.Set<TEntity>().Where(expression);
             IList < TEntity > result = a == null ? new List<TEntity>() :  a.ToList();
             return result;
