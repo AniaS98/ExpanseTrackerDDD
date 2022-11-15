@@ -1,4 +1,4 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+﻿using BaseDDD.DomainModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

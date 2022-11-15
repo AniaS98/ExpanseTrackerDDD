@@ -1,5 +1,4 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
-using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+﻿using BaseDDD.DomainModelLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

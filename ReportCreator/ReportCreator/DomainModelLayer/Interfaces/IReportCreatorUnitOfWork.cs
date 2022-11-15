@@ -1,15 +1,18 @@
-﻿using System;
+﻿using BaseDDD.DomainModelLayer.Interfaces;
+using BaseDDD.DomainModelLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ReportCreator.DomainModelLayer.Interfaces
 {
-    public interface IReportCreatorUnitOfWork : IDisposable
+    public interface IReportCreatorUnitOfWork : IUnitOfWork, IDisposable
     {
         IAccountRepository AccountRepository { get; }
         ITransactionRepository TransactionRepository { get; }
-        void Commit();
-        void RejectChanges();
+        IUserRepository UserRepository { get; }
+
+        void CheckEventsAndUpdate(EventBus eventBus);
     }
 
 }

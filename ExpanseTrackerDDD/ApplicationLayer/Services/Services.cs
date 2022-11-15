@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using Newtonsoft.Json.Linq;
+using BaseDDD.DomainModelLayer.Models;
 
 namespace ExpanseTrackerDDD.ApplicationLayer.Services
 {
@@ -31,8 +32,8 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Services
                     result = responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
 
                 }
-                //else
-                //    Console.WriteLine(String.Format("{0} is not available in the NBP portal"), row[0].ToString());
+                else
+                    Console.WriteLine(String.Format("{0} is not available in the NBP portal"));
 
             }
             if (result != "")

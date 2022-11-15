@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//using System.Data.Entity;
 using ExpanseTrackerDDD.DomainModelLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
-using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
-using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
 using ExpanseTrackerDDD.DomainModelLayer.Events.Implementations;
+using BaseDDD.DomainModelLayer.Events;
+using BaseDDD.DomainModelLayer.Models;
+using BaseDDD.DomainModelLayer.Events.Implementations;
 
 namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 {
@@ -17,8 +17,8 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
     {
         private ETContext Context;
         private IDomainEventDispatcher EventDispatcher;
-        private IEventBus EventBus;
 
+        public EventBus EventBus { get; }
         public IUserRepository UserRepository { get; }
 
         public IAccountRepository AccountRepository { get; }
@@ -27,7 +27,7 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 
         public ITransactionRepository TransactionRepository { get; }
 
-        public ExpanseTrackerUnitOfWork(ETContext context, IDomainEventDispatcher eventDispatcher, IEventBus eventBus)
+        public ExpanseTrackerUnitOfWork(ETContext context, IDomainEventDispatcher eventDispatcher, EventBus eventBus)
         {
             this.Context = context;
             this.UserRepository = new UserRepository(context);
@@ -53,17 +53,34 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
                 //Czyszczenie listy zdarzeń
                 dee.DomainEvents.Clear();
                 //Obsługa zdarzeń
-                foreach (Event e in events)
+                foreach (DomainEvent e in events)
                 {
-                    EventDispatcher.Dispatch(e);
-                    if(e is IIntegrationEvent)
-                        EventBus.Publish(e);
-        
+                    EventDispatcher.Dispatch(e);        
                 }
 
-                
+            }
+
+
+            //Pobieranie wszytkich zmian
+            var integrationEventEntities = Context.ChangeTracker.Entries<Entity>()
+                .Select(x => x.Entity)
+                .Where(x => x.IntegrationEvents.Any()).ToArray();
+
+            //Iteraja po wszystkich entity, w których zaszły zmiany
+            foreach (var iee in integrationEventEntities)
+            {
+                //Pobieranie wszystkich zdarzeń danego entity
+                var events = iee.IntegrationEvents.ToArray();
+                //Czyszczenie listy zdarzeń
+                iee.IntegrationEvents.Clear();
+                //Przeniesienie do Busa
+                foreach (IEvent e in events)
+                {
+                    EventBus.Add(e);
+                }
 
             }
+
 
             Context.SaveChanges();
         }

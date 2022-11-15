@@ -6,9 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationLayer\IntegrationEventHandlers\" />
-    <Folder Include="DomainModelLayer\Helpers\" />
-    <Folder Include="DomainModelLayer\Policies\" />
+    <Folder Include="DomainModelLayer\Events\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BaseDDD\BaseDDD.csproj" />
     <ProjectReference Include="..\..\ExpanseTrackerDDD\ExpanseTrackerDDD.csproj" />
   </ItemGroup>
 

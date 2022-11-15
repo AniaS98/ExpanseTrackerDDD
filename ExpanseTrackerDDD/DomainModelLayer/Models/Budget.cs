@@ -1,5 +1,5 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
-using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+﻿using BaseDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using System;
 using System.Collections.Generic;

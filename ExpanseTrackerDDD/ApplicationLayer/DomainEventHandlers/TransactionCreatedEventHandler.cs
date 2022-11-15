@@ -1,5 +1,5 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
-using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
+﻿using BaseDDD.DomainModelLayer.Events;
+using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Helpers;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers
 {
-    public class TransactionCreatedEventHandler: IEventHandler<TransactionCreatedEvent>
+    public class TransactionCreatedEventHandler: IDomainEventHandler<TransactionCreatedEvent>
     {
         private IBudgetRepository _budgetRepository;
         private IAccountRepository _accountRepository;
@@ -25,15 +25,12 @@ namespace ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers
             // Aktualizacja budżetu
             // Aktualizacja budżetu nastepuje tylko w przypadku gdy transakcja jest typu Expanse
             if(eventData.Transaction.Type == TransactionType.Expanse)
-            {
-                // Pobranie zmiennej Budzet
-                var budget = this._budgetRepository.GetActiveByAccountIdAndCategory(eventData.Transaction.AccountId, eventData.Transaction.TransactionCategory);
-                
+            {                
                 // Aktualizacja budżetu jeżeli istniał a transakcja jest rozliczona
-                if (budget != null && eventData.Transaction.Status == TransactionStatus.Settled)
+                if (eventData.Budget != null && eventData.Transaction.Status == TransactionStatus.Settled)
                 {
-                    budget.UpdateCurrentValue(eventData.Transaction.Value);
-                    this._budgetRepository.Update(budget);
+                    eventData.Budget.UpdateCurrentValue(eventData.Transaction.Value);
+                    this._budgetRepository.Update(eventData.Budget);
                 }
             }
 

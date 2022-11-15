@@ -4,8 +4,8 @@ using System.Text;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using System.Security;
 using System.Collections.ObjectModel;
-using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
+using BaseDDD.DomainModelLayer.Models;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {

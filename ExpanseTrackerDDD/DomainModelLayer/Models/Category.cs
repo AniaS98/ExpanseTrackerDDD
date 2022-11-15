@@ -1,4 +1,4 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
+﻿using BaseDDD.DomainModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -72,13 +72,11 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
     {
         public CategoryName Name { get; protected set; }
         public SubcategoryName SubcategoryName { get; protected set; }
-        private string IconPath;
 
         public Category(CategoryName name, SubcategoryName subcategoryName)
         {
             this.Name = name;
             this.SubcategoryName = subcategoryName;
-            //jakoś trzeba ustawić URL do 
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

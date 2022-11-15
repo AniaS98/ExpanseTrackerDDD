@@ -40,6 +40,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             user = new User(command.Id,  command.Login, command.Password, command.FirstName, command.LastName);
             this._unitOfWork.UserRepository.Insert(user);
 
+            //Utworzenie zdarzenia utworzenia użytkownika
+
+
             this._unitOfWork.Commit();
         }
 
@@ -60,6 +63,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Logowanie
             user.LogIn();
             this._unitOfWork.UserRepository.Update(user);
+
+            //Utworzenie zdarzenia odnośnie logowania do konta
+
 
             this._unitOfWork.Commit();
         }

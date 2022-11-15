@@ -1,5 +1,6 @@
 ﻿using ExpanseTrackerDDD.ApplicationLayer.Commands.AccountCommands;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
+using ExpanseTrackerDDD.DomainModelLayer.Events.IntegrationEvents;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System;
@@ -23,7 +24,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
         /// <param name="command"></param>
         public void Execute(CreateAccountCommand command)
         {
-            //Sprawdzenie, czy uźytkownik istnieje
+            //Sprawdzenie, czy użytkownik istnieje
             User user = this._unitOfWork.UserRepository.Get(command.UserId);
             if (user == null)
                 throw new Exception($"User with Id '{command.UserId}' does not exist!");
@@ -44,6 +45,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Utworzenie konta
             account = new Account(command.Id, command.Name, command.AccountNumber, command.Type, command.CurrencyName, command.UserId);
             this._unitOfWork.AccountRepository.Insert(account);
+
+            //Dodanie zdarzenia o powstaniu konta
+            account.AddIntegrationEvent(new AccountCreatedEvent(account));
 
             this._unitOfWork.Commit();
         }
@@ -74,6 +78,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             
             //Aktualizacja bazy
             this._unitOfWork.AccountRepository.Update(account);
+
+            //Dodanie zdarzenia o aktualizacji konta
+            account.AddIntegrationEvent(new AccountUpdatedEvent(account));
 
             this._unitOfWork.Commit();
         }

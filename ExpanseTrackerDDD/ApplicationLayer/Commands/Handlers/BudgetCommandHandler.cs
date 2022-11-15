@@ -1,4 +1,5 @@
-﻿using ExpanseTrackerDDD.ApplicationLayer.Commands.BudgetCommands;
+﻿using BaseDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.ApplicationLayer.Commands.BudgetCommands;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Factories;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;

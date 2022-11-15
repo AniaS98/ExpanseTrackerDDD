@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using BaseDDD.DomainModelLayer.Models;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
-using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
@@ -31,11 +31,11 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
 
         protected Account(){}
 
-        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m, Money overdraft=null) : base(id)
+        public Account(Guid id, string name, string accountNumber, AccountType type, CurrencyName currencyName, Guid userId, decimal balance = 0.0m, decimal overdraft=0) : base(id)
         {
             this.Id = id;
             this.Balance = new Money(balance, currencyName);
-            this.Overdraft = overdraft;
+            this.Overdraft = new Money(overdraft, currencyName);
             this.Name = name;
             this.AccountNumber = accountNumber;
             this.Type = type;
@@ -56,6 +56,10 @@ namespace ExpanseTrackerDDD.DomainModelLayer.Models
         public void UpdateType(AccountType type)
         {
             this.Type = type;
+        }
+        public void UpdateOverdraft(Money value)
+        {
+            this.Overdraft = value;
         }
 
         public void UpdateOriginalBalance(Money value)

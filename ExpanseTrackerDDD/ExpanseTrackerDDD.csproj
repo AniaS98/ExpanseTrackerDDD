@@ -22,7 +22,11 @@
 
   <ItemGroup>
     <Folder Include="ApplicationLayer\Interfaces\" />
-    <Folder Include="DomainModelLayer\Events\IntegrationEvents\" />
+    <Folder Include="DomainModelLayer\Events\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaseDDD\BaseDDD.csproj" />
   </ItemGroup>
 
 </Project>

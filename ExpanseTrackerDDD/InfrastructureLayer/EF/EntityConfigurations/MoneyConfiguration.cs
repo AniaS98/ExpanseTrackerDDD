@@ -1,4 +1,5 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Models;
+﻿using BaseDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.DomainModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

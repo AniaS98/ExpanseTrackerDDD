@@ -17,7 +17,6 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Budget> Budgets { get; set; }
-        //Chyba to tutaj
 
         public ETContext(DbContextOptions<ETContext> options) : base(options) 
         {

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpanseTrackerDDD", "Expans
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportCreator", "ReportCreator\ReportCreator\ReportCreator.csproj", "{DB3EFDFD-87E0-4F01-AFCD-FE7A6D8FE66D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "ExpanseTrackerTester\Tester.csproj", "{B3784FF3-1BE9-4473-A0A2-4CE28AC40F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tester", "ExpanseTrackerTester\Tester.csproj", "{B3784FF3-1BE9-4473-A0A2-4CE28AC40F48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseDDD", "BaseDDD\BaseDDD.csproj", "{B7BFA81B-2979-4FD7-B49A-A509806A5901}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{B3784FF3-1BE9-4473-A0A2-4CE28AC40F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3784FF3-1BE9-4473-A0A2-4CE28AC40F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3784FF3-1BE9-4473-A0A2-4CE28AC40F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7BFA81B-2979-4FD7-B49A-A509806A5901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7BFA81B-2979-4FD7-B49A-A509806A5901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7BFA81B-2979-4FD7-B49A-A509806A5901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7BFA81B-2979-4FD7-B49A-A509806A5901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

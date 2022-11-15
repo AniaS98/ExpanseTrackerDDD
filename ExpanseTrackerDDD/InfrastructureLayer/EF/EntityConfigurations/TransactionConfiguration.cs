@@ -15,9 +15,9 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
         {
             //Ustawienie klucza głównego
             builder.HasKey(a => a.Id);
+
             //Ustawienie klucza obcego
             builder.Property(a => a.Id).ValueGeneratedNever();
-            //builder.Ignore(a => a.DomainEventPublisher);
             builder.Property<Guid>("AccountId").IsRequired();
 
             // Relacja 1:N pomiędzy Account i Transaction

@@ -1,25 +1,24 @@
-﻿using ExpanseTrackerDDD.DomainModelLayer.Events;
-using ExpanseTrackerDDD.DomainModelLayer.Events.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using RabbitMQ.Client;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Hosting.Internal;
-using System.IO;
-using ExpanseTrackerDDD.ApplicationLayer.DomainEventHandlers;
+
 
 namespace ReportCreator
 {
     public class Program
     {
-        public static void Main(IServiceProvider serviceProvider)
+        public static void Main()
         {
-            var eventBus = serviceProvider.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<TransactionCreatedEvent>(TransactionCreatedEventHandler);
+
 
 
         }
 
+        private static void ConfigureServices(IServiceCollection serviceCollection)
+        {
+
+        }
     }
 }
+
+
+//            var eventBus = serviceProvider.GetRequiredService<IIntegrationEvent>();

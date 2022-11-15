@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
-using ExpanseTrackerDDD.DomainModelLayer.Models.Basic;
 using ExpanseTrackerDDD.DomainModelLayer.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using BaseDDD.DomainModelLayer.Models;
 
 namespace ExpanseTrackerDDD.DomainModelLayer.Models
 {

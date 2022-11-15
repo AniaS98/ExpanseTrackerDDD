@@ -1,4 +1,5 @@
-﻿using ExpanseTrackerDDD.ApplicationLayer.Services;
+﻿using BaseDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.ApplicationLayer.Services;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Helpers;
 using ExpanseTrackerDDD.DomainModelLayer.Models;

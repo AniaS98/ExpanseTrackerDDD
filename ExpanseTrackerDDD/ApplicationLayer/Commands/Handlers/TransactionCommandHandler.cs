@@ -1,4 +1,5 @@
-﻿using ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands;
+﻿using BaseDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands;
 using ExpanseTrackerDDD.DomainModelLayer.Events;
 using ExpanseTrackerDDD.DomainModelLayer.Factories;
 using ExpanseTrackerDDD.DomainModelLayer.Helpers;
@@ -60,14 +61,15 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             this._unitOfWork.TransactionRepository.Insert(fromTransaction);
 
             //Stworzenie zdarzenia informującego o stworzeniu transkacji
-            fromTransaction.AddDomainEvent(new TransactionCreatedEvent(fromTransaction, fromAccount));
+            fromTransaction.AddDomainEvent(new TransactionCreatedEvent(fromTransaction, fromAccount, null));
 
             //Transfer - stworzenie nowej tranakcji dla konta docelowego
             Transaction toTransaction = _transactionFactory.CreateTransfer(fromTransaction, command.ToAccountId);
             this._unitOfWork.TransactionRepository.Insert(toTransaction);
 
             //Stworzenie zdarzenia informującego o stworzeniu transkacji
-            toTransaction.AddDomainEvent(new TransactionCreatedEvent(toTransaction, toAccount));
+            toTransaction.AddDomainEvent(new TransactionCreatedEvent(toTransaction, toAccount, null));
+            //toTransaction.AddIntegrationEvent(new RC_TransactionCreatedEvent(toTransaction, toAccount));
 
             this._unitOfWork.Commit();
         }
@@ -105,19 +107,20 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
 
             Recurrency recurrency = new Recurrency(command.TransactionDate);
             //Stworzenie transakcji
-            Transaction fromTransaction = _transactionFactory.CreateTransaction(command.FromTransactionId, command.Description, TransactionType.Transfer, -value, command.CatName,
-                command.CatSubcategoryName, recurrency, command.TransactionDate, command.Status, command.FromAccountId, "", command.Note);
+            Transaction fromTransaction = _transactionFactory.CreateTransaction(command.FromTransactionId, command.Description, 
+                TransactionType.Transfer, -value, command.CatName, command.CatSubcategoryName, recurrency, command.TransactionDate, 
+                command.Status, command.FromAccountId, "", command.Note);
             this._unitOfWork.TransactionRepository.Insert(fromTransaction);
 
             //Stworzenie zdarzenia informującego o stworzeniu transkacji
-            fromTransaction.AddDomainEvent(new TransactionCreatedEvent(fromTransaction, fromAccount));
+            fromTransaction.AddDomainEvent(new TransactionCreatedEvent(fromTransaction, fromAccount, null));
 
             //Wymiana - stworzenie nowej tranakcji dla konta docelowego
             Transaction toTransaction = _transactionFactory.Exchange(fromTransaction, toAccount.Id, toAccount.CurrencyName);
             this._unitOfWork.TransactionRepository.Insert(toTransaction);
 
             //Stworzenie zdarzenia informującego o stworzeniu transkacji
-            toTransaction.AddDomainEvent(new TransactionCreatedEvent(toTransaction, toAccount));
+            toTransaction.AddDomainEvent(new TransactionCreatedEvent(toTransaction, toAccount, null));
 
             this._unitOfWork.Commit();
         }
@@ -130,6 +133,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
         {
             //Pobranie konta
             Account account = this._unitOfWork.AccountRepository.Get(command.AccountId);
+
+            // Pobranie zmiennej Budzet
+            Budget budget = this._unitOfWork.BudgetRepository.GetActiveByAccountIdAndCategory(command.AccountId, new Category(command.CatName, command.CatSubcategoryName));
 
             //Sprawdzenie, czy użytkownik jest zalogowany
             User user = this._unitOfWork.UserRepository.Get(account.UserId);
@@ -162,7 +168,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
                 date.AddDays(recurrency.DaysApart);
                 //Stworzenie zdarzenia informującego o stworzeniu transkacji
                 if(i == 0)
-                    transaction.AddDomainEvent(new TransactionCreatedEvent(transaction, account));
+                    transaction.AddEvent(new TransactionCreatedEvent(transaction, account, budget));
             }
 
             this._unitOfWork.Commit();
@@ -177,6 +183,9 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             //Pobieranie konta i transakcji 
             Account account = this._unitOfWork.AccountRepository.Get(command.AccountId);
             Transaction transaction = this._unitOfWork.TransactionRepository.Get(command.Id);
+
+            // Pobranie zmiennej Budzet
+            Budget budget = this._unitOfWork.BudgetRepository.GetActiveByAccountIdAndCategory(command.AccountId, transaction.TransactionCategory);
 
             //Sprawdzenie, czy użytkownik jest zalogowany
             User user = this._unitOfWork.UserRepository.Get(account.UserId);
@@ -201,7 +210,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             this._unitOfWork.TransactionRepository.Update(transaction);
 
             //Stworzenie zdarzenia informującego o zaktualizowaniu transkacji
-            transaction.AddDomainEvent(new TransactionUpdatedEvent(transaction, account, value));
+            transaction.AddEvent(new TransactionUpdatedEvent(transaction, account, budget, value));
 
             this._unitOfWork.Commit();
         }
@@ -227,11 +236,14 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             if (user.status != UserStatus.LoggedIn)
                 throw new Exception("Please log in to delete the transaction");
 
+            // Pobranie zmiennej Budzet
+            Budget budget = this._unitOfWork.BudgetRepository.GetActiveByAccountIdAndCategory(account.Id, transaction.TransactionCategory);
+
             //Stworzenie obiektu Money z atrybutem Amount rónwym 0
             Money value = new Money(account.CurrencyName);
 
             //Stworzenie zdarzenia informującego o zaktualizowaniu transkacji
-            transaction.AddDomainEvent(new TransactionUpdatedEvent(transaction, account, value));
+            transaction.AddDomainEvent(new TransactionUpdatedEvent(transaction, account, budget, value));
 
             //Usunięcie transakcji
             this._unitOfWork.TransactionRepository.Delete(transaction);
@@ -260,7 +272,7 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
                 }
 
                 //Stworzenie zdarzenia informującego o zaktualizowaniu transkacji
-                transaction.AddDomainEvent(new TransactionUpdatedEvent(transaction, account, value));
+                transaction.AddEvent(new TransactionUpdatedEvent(transaction, account, budget, value));
 
                 //Usunięcie transakcji
                 this._unitOfWork.TransactionRepository.Delete(transaction);
@@ -285,11 +297,14 @@ namespace ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers
             if (account == null)
                 throw new Exception($"Account with Id '{transaction.AccountId}' does not exist!");
 
+            // Pobranie zmiennej Budzet
+            Budget budget = this._unitOfWork.BudgetRepository.GetActiveByAccountIdAndCategory(account.Id, transaction.TransactionCategory);
+
             //Jeżeli data transakcji minęła (lub jest tego samego dnia) to status zmienia się na settled, następuje zgłoszenie zdarzenia
             if (transaction.TransactionDate <= DateTime.Now)
             {
                 transaction.UpdateStatus(TransactionStatus.Settled);
-                transaction.AddDomainEvent(new TransactionCreatedEvent(transaction, account));
+                transaction.AddEvent(new TransactionCreatedEvent(transaction, account, budget));
                 this._unitOfWork.TransactionRepository.Update(transaction);
             }
             this._unitOfWork.Commit();

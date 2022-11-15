@@ -3,6 +3,7 @@ using ExpanseTrackerDDD.DomainModelLayer.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using System.Text;
+using BaseDDD.DomainModelLayer.Models;
 
 namespace ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands
 {

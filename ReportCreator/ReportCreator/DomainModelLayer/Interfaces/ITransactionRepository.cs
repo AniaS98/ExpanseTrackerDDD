@@ -7,5 +7,6 @@ namespace ReportCreator.DomainModelLayer.Interfaces
 {
     public interface ITransactionRepository : IRepository<Transaction>
     {
+        List<Transaction> GetAllTransactionsByAccountId(Guid accountId);
     }
 }

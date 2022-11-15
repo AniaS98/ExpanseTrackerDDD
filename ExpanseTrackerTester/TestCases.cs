@@ -1,11 +1,15 @@
-﻿using ExpanseTrackerDDD.ApplicationLayer.Commands.AccountCommands;
+﻿using BaseDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.ApplicationLayer.Commands.AccountCommands;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.TransactionCommands;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.UserCommands;
 using ExpanseTrackerDDD.ApplicationLayer.Queries;
 using ExpanseTrackerDDD.ApplicationLayer.Queries.Handlers;
 using ExpanseTrackerDDD.DomainModelLayer.Models;
+using ExpanseTrackerDDD.InfrastructureLayer.EF;
 using Microsoft.Extensions.DependencyInjection;
+using ReportCreator.ApplicationLayer.Commands;
+using ReportCreator.ApplicationLayer.Commands.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Security;
@@ -17,22 +21,36 @@ namespace Tester
     {
         private IServiceProvider _serviceProvider;
 
+        //Expanse Tracker
         private UserCommandHandler _userCommandHandler;
         private AccountCommandHandler _accountCommandHandler;
         private BudgetCommandHandler _budgetCommandHandler;
         private TransactionCommandHandler _transactionCommandHandler;
         private QueryHandler _queryHandler;
 
+        //Report Creator
+        private ReportCommandHandler _reportCommandHandler;
+
+        private EventBus _eventBus;
+
         public TestCases(IServiceCollection serviceCollection)
         {
             _serviceProvider = serviceCollection.BuildServiceProvider();
-
+            
             _userCommandHandler = _serviceProvider.GetRequiredService<UserCommandHandler>();
             _accountCommandHandler = _serviceProvider.GetRequiredService<AccountCommandHandler>();
             _budgetCommandHandler = _serviceProvider.GetRequiredService<BudgetCommandHandler>();
             _transactionCommandHandler = _serviceProvider.GetRequiredService<TransactionCommandHandler>();
+            _reportCommandHandler = _serviceProvider.GetRequiredService<ReportCommandHandler>();
 
             _queryHandler = _serviceProvider.GetRequiredService<QueryHandler>();
+
+            _eventBus = _serviceProvider.GetRequiredService<EventBus>();
+        }
+
+        public EventBus GetEvents()
+        {
+            return _serviceProvider.GetRequiredService<ExpanseTrackerUnitOfWork>().EventBus;
         }
 
         public void Run()
@@ -56,6 +74,12 @@ namespace Tester
                 RepeatPassword = password
             });
             Console.WriteLine("User created\n");
+
+            _reportCommandHandler.Execute(new ShowAllReportsCommand()
+            {
+                eventBus = GetEvents()
+            }) ;
+
 
             //Wyświetlenie wszystkich użytkowników
             var users = _queryHandler.Execute(new GetAllUsersQuery());
@@ -232,9 +256,15 @@ namespace Tester
 
             Console.WriteLine("test");
 
+            _reportCommandHandler.Execute(new ShowAllReportsCommand() 
+            { 
+                eventBus = GetEvents(),
+                ReportPeriod = ReportPeriod.Current,
+                ReportType = ReportCreator.DomainModelLayer.Models.ReportType.Weekly,
+                UserId = userId1
+            });
 
-
-
+            Console.WriteLine("test");
         }
 
 
