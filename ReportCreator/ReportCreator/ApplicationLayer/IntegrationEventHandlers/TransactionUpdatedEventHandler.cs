@@ -33,7 +33,11 @@ namespace ReportCreator.ApplicationLayer.IntegrationEventHandlers
 
         public RC_DML_E_IE.TransactionUpdatedEvent Map(ET_DML_E.TransactionUpdatedEvent eventData)
         {
-            return new RC_DML_E_IE.TransactionUpdatedEvent(new RC_DML_M.Transaction(eventData.Transaction, eventData.Budget.Id),
+            return new RC_DML_E_IE.TransactionUpdatedEvent(new RC_DML_M.Transaction(eventData.Transaction.Id,
+                eventData.Transaction.Description, eventData.Transaction.Value, eventData.Transaction.Type.ToString(),
+                eventData.Transaction.Frequency.ToString(), eventData.Transaction.TransactionCategory.ToString(),
+                eventData.Transaction.TransactionDate, eventData.Transaction.Status.ToString(), eventData.Budget.Id,
+                eventData.Transaction.AccountId),
                 new RC_DML_M.Account(eventData.Account),
                 eventData.Value);
         }

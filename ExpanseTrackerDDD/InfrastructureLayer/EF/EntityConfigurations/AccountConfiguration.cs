@@ -26,6 +26,9 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
 
             // Relacja 1:N pomiędzy User i Account
             builder.HasOne<User>().WithMany().IsRequired(true).HasForeignKey("UserId");
+
+            builder.Ignore(a => a.DomainEvents);
+            builder.Ignore(a => a.IntegrationEvents);
         }
     }
 }

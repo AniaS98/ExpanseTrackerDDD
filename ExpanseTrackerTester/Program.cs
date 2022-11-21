@@ -4,7 +4,8 @@ using System.IO;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.BudgetCommands;
 using ExpanseTrackerDDD.ApplicationLayer.Commands.Handlers;
 using ExpanseTrackerDDD.ApplicationLayer.DTOs;
-using ExpanseTrackerDDD.ApplicationLayer.Mappers;
+using ET_AL_M = ExpanseTrackerDDD.ApplicationLayer.Mappers;
+using RC_AL_M = ReportCreator.ApplicationLayer.Mappers;
 using ExpanseTrackerDDD.ApplicationLayer.Queries;
 using ExpanseTrackerDDD.ApplicationLayer.Queries.Handlers;
 using ExpanseTrackerDDD.DomainModelLayer.Factories;
@@ -60,8 +61,8 @@ namespace Tester
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            // event publishers and handlers - czy w tym podejściu tak trzeba robić?
-            serviceCollection.AddSingleton<IDomainEventDispatcher>();
+            // event publishers and handlers
+            //serviceCollection.AddSingleton<IDomainEventDispatcher>();
             serviceCollection.AddSingleton<IDomainEventHandler<ET_DML_E.TransactionUpdatedEvent>, ET_AL_DEH.TransactionUpdatedEventHandler>();
             serviceCollection.AddSingleton<IDomainEventHandler<ET_DML_E.TransactionCreatedEvent>, ET_AL_DEH.TransactionCreatedEventHandler>();
 
@@ -80,7 +81,7 @@ namespace Tester
             var ETContext = ETConnection.InitializeExpanseTrackerContext();
             serviceCollection.AddSingleton(ETContext);
             //RCContext
-            var RCContext = ETConnection.InitializeExpanseTrackerContext();
+            var RCContext = ETConnection.InitializeReportCreatorContext();
             serviceCollection.AddSingleton(RCContext);
 
             //Commands and Query Handlers - Expanse Tracker
@@ -108,17 +109,27 @@ namespace Tester
 
             serviceCollection.AddSingleton<RC_DML_I.IAccountRepository, RC_DML_R.AccountRepository>();
             serviceCollection.AddSingleton<RC_DML_I.ITransactionRepository, RC_DML_R.TransactionRepository>();
+            serviceCollection.AddSingleton<RC_DML_I.IBudgetRepository, RC_DML_R.BudgetRepository>();
+            serviceCollection.AddSingleton<RC_DML_I.IUserRepository, RC_DML_R.UserRepository>();
 
             // Domain Model services + factories + etc
             serviceCollection.AddSingleton<AccountFactory>();
             serviceCollection.AddSingleton<BudgetFactory>();
             serviceCollection.AddSingleton<TransactionFactory>();
 
-            serviceCollection.AddSingleton<AccountMapper>();
-            serviceCollection.AddSingleton<BudgetMapper>();
-            serviceCollection.AddSingleton<Mappers>();
-            serviceCollection.AddSingleton<TransactionMapper>();
-            serviceCollection.AddSingleton<UserMapper>();
+            serviceCollection.AddSingleton<ET_AL_M.AccountMapper>();
+            serviceCollection.AddSingleton<ET_AL_M.BudgetMapper>();
+            serviceCollection.AddSingleton<ET_AL_M.Mappers>();
+            serviceCollection.AddSingleton<ET_AL_M.TransactionMapper>();
+            serviceCollection.AddSingleton<ET_AL_M.UserMapper>();
+
+            serviceCollection.AddSingleton<RC_AL_M.AccountMapper>();
+            serviceCollection.AddSingleton<RC_AL_M.BudgetMapper>();
+            serviceCollection.AddSingleton<RC_AL_M.MoneyMapper>();
+            serviceCollection.AddSingleton<RC_AL_M.TransactionMapper>();
+            serviceCollection.AddSingleton<RC_AL_M.UserMapper>();
+
+
         }
 
         private static void RenewAllBudgets(IServiceCollection serviceCollection)

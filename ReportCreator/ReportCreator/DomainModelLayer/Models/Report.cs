@@ -35,6 +35,14 @@ namespace ReportCreator.DomainModelLayer.Models
             this.OwnerId = ownerId;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name);
+
+            return base.ToString();
+        }
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             throw new NotImplementedException();

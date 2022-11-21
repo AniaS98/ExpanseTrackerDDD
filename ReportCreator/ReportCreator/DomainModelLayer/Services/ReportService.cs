@@ -164,24 +164,31 @@ namespace ReportCreator.DomainModelLayer.Services
             // Utworzenie obiektów Report niezależnych od czasu
             r = CreatePlannedPaymentReport(ownerId, accounts);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
             r = CreateBalancePerAccountReport(ownerId, accounts);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
             r = CreateRecurringDebtsReport(ownerId, accounts);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
 
             // Utworzenie obiektów Raport zależnych od czasu
             r = CreateCreditLimitUtilizationReport(ownerId, accounts, start, end);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
             r = CreateDebtToIncomeRatioReport(ownerId, accounts, start, end, reportType);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
             r = CreateExpansesStructureReport(ownerId, accounts, start, end);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
             r = CreateBudgetUtilizationReport(ownerId, accounts, start, end);
             reports.Add(r);
+            Console.WriteLine(r.ToString());
 
             r = CreateTrendLineReport();
             reports.Add(r);
-
+            Console.WriteLine(r.ToString());
         }
 
 

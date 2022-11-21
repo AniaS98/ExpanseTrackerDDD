@@ -11,6 +11,7 @@ namespace ReportCreator.DomainModelLayer.Models
         public Money Limit { get; protected set; }
         public Guid AccountId { get; protected set; }
 
+        public Budget() : base() {}
         public Budget(Guid id, Money limit, Guid accountId) : base(id)
         {
             this.Limit = limit;

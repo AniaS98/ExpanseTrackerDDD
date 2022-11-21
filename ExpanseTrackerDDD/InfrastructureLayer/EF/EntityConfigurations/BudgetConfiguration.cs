@@ -28,7 +28,10 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF.EntityConfigurations
 
             //Relacja 1:1 pomiędzy Budget i Money
             builder.HasOne(b => b.CurrentValue);
-            builder.HasOne(b => b.Limit);        
+            builder.HasOne(b => b.Limit);
+
+            builder.Ignore(b => b.DomainEvents);
+            builder.Ignore(b => b.IntegrationEvents);
         }
     }
 }

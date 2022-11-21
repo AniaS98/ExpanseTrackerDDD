@@ -17,6 +17,9 @@ namespace ReportCreator.InfrastructureLayer.EF.EntityConfigurations
             //Ustawienie klucza obcego
             builder.Property(a => a.AccountId).ValueGeneratedNever();
             builder.Property<Guid>("AccountId").IsRequired();
+
+            builder.Ignore(b => b.DomainEvents);
+            builder.Ignore(b => b.IntegrationEvents);
         }
 
     }

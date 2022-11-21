@@ -27,7 +27,9 @@ namespace ReportCreator.ApplicationLayer.IntegrationEventHandlers
 
         public RC_DML_E_IE.AccountCreatedEvent Map(ET_DML_E_IE.AccountCreatedEvent eventData)
         {
-            RC_DML_M.Account account = new RC_DML_M.Account(eventData.Account);
+            RC_DML_M.Account account = new RC_DML_M.Account(eventData.Account.Id, eventData.Account.Name,
+                eventData.Account.Balance.Amount, eventData.Account.CurrencyName, eventData.Account.UserId,
+                eventData.Account.Overdraft.Amount);
             return new RC_DML_E_IE.AccountCreatedEvent(account);
         }
     }

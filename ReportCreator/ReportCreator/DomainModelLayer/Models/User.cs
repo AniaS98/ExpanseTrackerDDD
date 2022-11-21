@@ -11,6 +11,8 @@ namespace ReportCreator.DomainModelLayer.Models
     {
         public string Status { get; protected set; }
 
+        public User() : base() {}
+
         public User(Guid id, string status) : base(id)
         {
             this.Status = status;

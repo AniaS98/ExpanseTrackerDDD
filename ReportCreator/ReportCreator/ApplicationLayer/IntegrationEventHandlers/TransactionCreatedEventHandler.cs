@@ -34,8 +34,13 @@ namespace ReportCreator.ApplicationLayer.IntegrationEventHandlers
 
         public RC_DML_E_IE.TransactionCreatedEvent Map(ET_DML_E.TransactionCreatedEvent eventData)
         {
-            return new RC_DML_E_IE.TransactionCreatedEvent(new RC_DML_M.Transaction(eventData.Transaction, eventData.Budget.Id),
-                new RC_DML_M.Account(eventData.Account));
+            return new RC_DML_E_IE.TransactionCreatedEvent(new RC_DML_M.Transaction(eventData.Transaction.Id, 
+                eventData.Transaction.Description, eventData.Transaction.Value, eventData.Transaction.Type.ToString(), 
+                eventData.Transaction.Frequency.ToString(), eventData.Transaction.TransactionCategory.ToString(), 
+                eventData.Transaction.TransactionDate, eventData.Transaction.Status.ToString(), eventData.Budget.Id,
+                eventData.Transaction.AccountId), new RC_DML_M.Account(eventData.Account.Id, eventData.Account.Name, 
+                eventData.Account.Balance.Amount, eventData.Account.CurrencyName, eventData.Account.UserId, 
+                eventData.Account.Overdraft.Amount));
         }
     }
 }

@@ -16,7 +16,6 @@ namespace ReportCreator.ApplicationLayer.Mappers
                 Id = transaction.Id,
                 AccountId = transaction.AccountId,
                 Name = transaction.Name,
-                BudgetId = transaction.BudgetId,
                 Category = transaction.Category,
                 Date = transaction.Date,
                 Frequency = transaction.Frequency,

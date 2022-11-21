@@ -23,6 +23,9 @@ namespace ReportCreator.InfrastructureLayer.EF.EntityConfigurations
 
             //Relacja 1:1 pomiędzy Transaction i Money
             builder.HasOne(t => t.Value);
+
+            builder.Ignore(t => t.DomainEvents);
+            builder.Ignore(t => t.IntegrationEvents);
         }
     }
 }

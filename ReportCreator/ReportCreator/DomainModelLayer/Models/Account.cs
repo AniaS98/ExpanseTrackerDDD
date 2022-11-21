@@ -15,7 +15,7 @@ namespace ReportCreator.DomainModelLayer.Models
         public CurrencyName Currency { get; protected set; }
         public Guid OwnerId { get; protected set; }
 
-
+        public Account() :base() {}
         public Account(Guid id, string name, decimal balance, CurrencyName currencyName, Guid ownerId, decimal overdraft=0) : base(id)
         {
             this.Name = name;

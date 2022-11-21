@@ -54,6 +54,7 @@ namespace ReportCreator.InfrastructureLayer.EF
             {
                 EventDispatcher.Dispatch(e);
             }
+            eventBus.IntegrationEvents.Clear();
             Context.SaveChanges();
         }
 

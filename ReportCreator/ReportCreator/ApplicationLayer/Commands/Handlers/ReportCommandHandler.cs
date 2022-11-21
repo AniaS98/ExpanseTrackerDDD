@@ -24,6 +24,7 @@ namespace ReportCreator.ApplicationLayer.Commands.Handlers
             // Dodawanie wszelki zmian w klasach modelu
             _unitOfWork.CheckEventsAndUpdate(command.eventBus);
 
+
             // Wyszukanie użytkownika
             User user = _unitOfWork.UserRepository.GetUserById(command.UserId);
 
@@ -34,10 +35,8 @@ namespace ReportCreator.ApplicationLayer.Commands.Handlers
             if (user.Status == "LoggedOut")
                 throw new Exception("Report could not be shown, please log in");
 
-            //Tworzenie raportów
+            //Tworzenie i wyświetlanie raportów
             _reportService.CreateAllReports(command.UserId, command.ReportType, command.ReportPeriod);
-
-
         }
 
 

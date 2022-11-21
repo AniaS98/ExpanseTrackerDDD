@@ -21,7 +21,11 @@ namespace ReportCreator.DomainModelLayer.Events.IntegrationEvents
 
         public TransactionCreatedEvent(ET_DML_E.TransactionCreatedEvent eventData)
         {
-            this.Transaction = new RC_DML_M.Transaction(eventData.Transaction, eventData.Budget.Id);
+            this.Transaction = new RC_DML_M.Transaction(eventData.Transaction.Id, eventData.Transaction.Description, 
+                eventData.Transaction.Value, eventData.Transaction.Type.ToString(), 
+                eventData.Transaction.Frequency.ToString(), eventData.Transaction.TransactionCategory.ToString(),
+                eventData.Transaction.TransactionDate, eventData.Transaction.Status.ToString(), eventData.Budget.Id,
+                eventData.Transaction.AccountId);
             this.Account = new RC_DML_M.Account(eventData.Account);
         }
 

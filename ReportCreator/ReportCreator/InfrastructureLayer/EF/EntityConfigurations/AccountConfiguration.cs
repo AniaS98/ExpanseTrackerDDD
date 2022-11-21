@@ -24,6 +24,9 @@ namespace ReportCreator.InfrastructureLayer.EF.EntityConfigurations
 
             // Relacja 1:N pomiędzy User i Account
             builder.HasOne<User>().WithMany().IsRequired().HasForeignKey("OwnerId");
+
+            builder.Ignore(a => a.DomainEvents);
+            builder.Ignore(a => a.IntegrationEvents);
         }
     }
 }

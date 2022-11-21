@@ -20,7 +20,8 @@ namespace ExpanseTrackerDDD.InfrastructureLayer.EF
 
         public ETContext(DbContextOptions<ETContext> options) : base(options) 
         {
-            string basePath = @"D:\Ania\Documents\STUDIA\_Magisterka\_Praca Magisterska\ExpanseTrackerDDD\ExpanseTrackerTester\bin\Debug\netcoreapp3.1";
+            //string basePath = @"D:\Ania\Documents\STUDIA\_Magisterka\_Praca Magisterska\ExpanseTrackerDDD\ExpanseTrackerTester\bin\Debug\netcoreapp3.1";
+            string basePath = @"C:\Users\AnnaSzmit\Documents\My project\Program\ExpanseTrackerTester\bin\Debug\netcoreapp3.1";
             if (File.Exists(Path.Combine(basePath,"ExpanseTrackerDDD_Base.db")))
             {
                 File.Delete(Path.Combine(basePath, "ExpanseTrackerDDD_Base.db"));

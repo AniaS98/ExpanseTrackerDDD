@@ -2,6 +2,7 @@
 using ReportCreator.DomainModelLayer.Models;
 using ReportCreator.InfrastructureLayer.EF.EntityConfigurations;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,6 +17,14 @@ namespace ReportCreator.InfrastructureLayer.EF
 
         public RCContext(DbContextOptions<RCContext> options) : base(options)
         {
+            string basePath = @"C:\Users\AnnaSzmit\Documents\My project\Program\ExpanseTrackerTester\bin\Debug\netcoreapp3.1";
+            if (File.Exists(Path.Combine(basePath, "ReportCreator_Base.db")))
+            {
+                File.Delete(Path.Combine(basePath, "ReportCreator_Base.db"));
+                File.Delete(Path.Combine(basePath, "ReportCreator_Base.db-shm"));
+                File.Delete(Path.Combine(basePath, "ReportCreator_Base.db-wal"));
+            }
+
             Database.EnsureDeleted();
             Database.EnsureCreated();
         }
